@@ -42,12 +42,16 @@ pytz==2025.2
 referencing==0.36.2
 requests==2.32.4
 rpds-py==0.26.0
+scikit-learn==1.7.0
+scipy==1.15.3
 six==1.17.0
+sklearn==0.0
 smmap==5.0.2
 stanio==0.5.1
 streamlit==1.46.1
 sympy==1.14.0
 tenacity==9.1.2
+threadpoolctl==3.6.0
 toml==0.10.2
 torch==2.7.1
 torchvision==0.22.1

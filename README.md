@@ -42,5 +42,5 @@ source setup.sh
 ```
 
 ```bash
-streamlit run app.py
+streamlit run web_page/Home.py
 ```

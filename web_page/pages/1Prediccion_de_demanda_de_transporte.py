@@ -20,15 +20,18 @@ df_ciudad = df_demand[df_demand['Name_x'] == ciudad].copy()
 df_ciudad = df_ciudad.rename(columns={'VisitDate': 'ds', 'num_viajes': 'y'})
 df_ciudad['ds'] = pd.to_datetime(df_ciudad['ds'])
 
-# Mostrar serie real
-st.subheader(f"Demanda histórica en {ciudad}")
-st.line_chart(df_ciudad.set_index("ds")["y"])
-
 # Predecir
 future = modelo.make_future_dataframe(periods=30)
 forecast = modelo.predict(future)
+
 
 # Mostrar predicción interactiva
 st.subheader("Predicción para los próximos 30 días")
 fig = plot_plotly(modelo, forecast)
 st.plotly_chart(fig)
+
+
+# Mostrar serie real
+st.subheader(f"Demanda histórica en {ciudad}")
+st.line_chart(df_ciudad.set_index("ds")["y"])
+
