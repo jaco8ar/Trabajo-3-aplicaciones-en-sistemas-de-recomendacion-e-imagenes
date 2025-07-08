@@ -14,7 +14,7 @@
 ### 1. Clona el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/proyecto-demanda-turistica.git
+git clone https://github.com/jaco8ar/Trabajo-3-aplicaciones-en-sistemas-de-recomendacion-e-imagenes
 cd proyecto-demanda-turistica
 ```
 
