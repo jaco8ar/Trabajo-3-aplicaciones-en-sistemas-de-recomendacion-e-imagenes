@@ -1,0 +1,71 @@
+---
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+execute:
+  echo: false
+   
+---
+
+```{python}
+
+from IPython.display import display, HTML
+
+# HTML para la portada
+html_code = """
+<style>
+    h2 {
+        border: none !important;
+        box-shadow: none !important;
+        border-bottom: none !important;
+    }
+</style>
+<div style="
+    background-color:rgb(255, 255, 255);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #333;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);">
+    <h1 style="color:rgb(26, 54, 97); font-size: 50px;">Trabajo 3: aplicaciones en sistemas de recomendación e imágenes</h1>
+    <h2 style="color: #555;">Redes Neuronales y Algoritmos Bioinspirados</h2>
+
+    <h3 style="color: #222; margin: 10px 0;">Equipo:</h3>
+    <ul style="list-style: none; padding: 0; font-size: 20px;">
+        <li>Juan José Correa Hurtado</li>
+        <li>Jacobo Ochoa Ramírez</li>
+    </ul>
+    <h3 style="color: #222; margin: 10px 0;">Profesor:</h3>
+    <ul style="list-style: none; padding: 0; font-size: 20px;">
+        <li>Juan David Ospina Arango</li>
+    </ul>
+    <h2 style="color: #555;">Universidad Nacional de Colombia</h2>
+    <img src="imagenes/logo_UNAL.png" alt="logo UNAL" />
+</div>
+"""
+
+display(HTML(html_code))
+```
+
+
+# Introducción
+
+En el contexto actual, las empresas de transporte enfrentan desafíos crecientes relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. Factores como la variabilidad en la demanda, los riesgos asociados a la conducción distractiva y la necesidad de ofrecer experiencias personalizadas exigen soluciones tecnológicas avanzadas. Este proyecto propone el desarrollo de un sistema inteligente integrado basado en técnicas de aprendizaje profundo, con el objetivo de abordar tres problemáticas clave: la predicción de la demanda de transporte mediante series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos de viaje para los usuarios. 
+
+# Objetivos
+
+## Objetivo General
+
+Desarrollar un sistema inteligente integrado basado en aprendizaje profundo que permita predecir la demanda de transporte, clasificar comportamientos distractores en conductores a partir de imágenes y generar recomendaciones personalizadas de destinos de viaje, con el fin de optimizar la eficiencia operativa, mejorar la seguridad vial y elevar la experiencia del usuario en una empresa de transporte.
+
+## Objetivos especificos
+
+1. **Desarrollar un modelo de series de tiempo** que utilice datos históricos para predecir la demanda de transporte en rutas específicas durante los próximos 30 días, facilitando una mejor planificación de recursos.
+2. **Entrenar un modelo de clasificación de imágenes** para identificar comportamientos distractores en los conductores, como el uso del teléfono móvil o la somnolencia, con el fin de reducir riesgos de accidentes.
+3. **Implementar un sistema de recomendación personalizado** que sugiera destinos de viaje a los usuarios, utilizando información del historial de viajes y preferencias individuales.
+4. **Diseñar una herramienta web interactiva** que integre los tres módulos desarrollados, permitiendo la visualización de predicciones, la clasificación de imágenes y la generación de recomendaciones de manera accesible para los usuarios y administradores de la empresa.
+5. **Documentar el proceso completo de desarrollo** en un informe técnico.
+

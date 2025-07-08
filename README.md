@@ -18,7 +18,7 @@ git clone https://github.com/tuusuario/proyecto-demanda-turistica.git
 cd proyecto-demanda-turistica
 ```
 
-## 📦 Requisitos adicionales
+### 📦 Requisitos adicionales
 
 Este proyecto utiliza [Git Large File Storage (LFS)](https://git-lfs.com/) para manejar modelos grandes (.pkl).  
 Antes de clonar el repositorio, asegúrate de tener Git LFS instalado:

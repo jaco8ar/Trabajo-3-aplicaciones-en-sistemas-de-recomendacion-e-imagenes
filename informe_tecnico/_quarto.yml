@@ -1,0 +1,12 @@
+project:
+  type: website
+
+resources:
+  -imagenes/**
+
+website:
+  title: "Aplicaciones en Sistemas de Recomendación e Imágenes"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Inicio
