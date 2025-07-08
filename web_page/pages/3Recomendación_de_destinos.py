@@ -1,189 +1,157 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import os
-
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.decomposition import TruncatedSVD
 from sklearn.metrics.pairwise import cosine_similarity
-from scipy.sparse import load_npz
+from sklearn.preprocessing import MultiLabelBinarizer
 
-#maps de traducción
+# ------------------ Título ------------------
+st.title("🌎 Recomendador de Destinos Turísticos")
 
-tiempo_map = {
-    'Nov-Mar': 'Nov-Mar',
-    'Nov-Feb': 'Nov-Feb',
-    'Apr-Jun': 'Abr-Jun',
-    'Oct-Mar': 'Oct-Mar',
-    "Sep-Mar": "Sep-Mar"
-}
-
-tipo_map = {
-    'Beach': 'Playa',
-    'Historical': 'Histórico',
-    'Adventure': 'Aventura',
-    "City": "Ciudad",
-    "Nature": "Naturaleza"
-}
-
-
-
-# --------------------- Cargar modelos y datos ---------------------
-st.title("🔍 Sistema de Recomendación de Destinos")
-
-path = "recommender_matrices"
-
+# ------------------ Cargar datos ------------------
 @st.cache_resource
 def load_data():
-    destination_features = pd.read_csv(f"{path}/destination_features.csv")
-    destination_features['DestinationID'] = destination_features['DestinationID'].astype(int)
-    user_item_matrix = pd.read_csv(f"{path}/user_item_matrix.csv", index_col=0)
-    user_item_matrix.columns = user_item_matrix.columns.astype(int)
-    feature_matrix = load_npz(f"{path}/feature_matrix.npz")
-    user_similarity = np.load(f"{path}/user_similarity.npy")
-    return destination_features, user_item_matrix, feature_matrix, user_similarity
+    destinos = pd.read_csv("recommender_matrices/Expanded_Destinations.csv")
+    reviews = pd.read_csv("recommender_matrices/Final_Updated_Expanded_Reviews.csv")
+    historial = pd.read_csv("recommender_matrices/Final_Updated_Expanded_UserHistory.csv")
+    usuarios = pd.read_csv("recommender_matrices/Final_Updated_Expanded_Users.csv")
 
-destination_features, user_item_matrix, feature_matrix, user_similarity = load_data()
-vectorizer = CountVectorizer(stop_words='english')
-vectorizer.fit(destination_features['features'].values.astype(str))  # asegúrate de tener esta columna
+    # Tipado
+    for df in [usuarios, historial, reviews]:
+        df["UserID"] = df["UserID"].astype(str)
+    for df in [destinos, historial, reviews]:
+        df["DestinationID"] = df["DestinationID"].astype(str)
 
-# --------------------- Función principal ---------------------
-def hybrid_recommend(user_id, user_item_matrix, user_similarity, destinations_df, feature_matrix, vectorizer,
-                     user_preferences=None, top_n=5, k_neighbors=5):
+    # Merge total
+    df = historial.merge(usuarios, on="UserID", how="left").merge(destinos, on="DestinationID", how="left")
+    df["VisitDate"] = pd.to_datetime(df["VisitDate"])
+    df["PreferencesList"] = df["Preferences"].str.split(',')
+    df["Type"] = df["Type"].str.lower()
+    df["BestTimeToVisit"] = df["BestTimeToVisit"].str.lower()
 
-    destination_ids = destinations_df['DestinationID'].values
+    # Normalización
+    df["PopularityNormalizado"] = (df["Popularity"] - df["Popularity"].min()) / (df["Popularity"].max() - df["Popularity"].min())
+    df["ExperienceRatingNormalizado"] = (df["ExperienceRating"] - df["ExperienceRating"].min()) / (df["ExperienceRating"].max() - df["ExperienceRating"].min())
 
-    destinations_df['Type'] = destinations_df['Type'].map(tipo_map).fillna(destinations_df['Type'])
-    destinations_df['BestTimeToVisit'] = destinations_df['BestTimeToVisit'].map(tiempo_map).fillna(destinations_df['BestTimeToVisit'])
+    return df
 
-    if user_id in user_item_matrix.index:
-        user_idx = user_item_matrix.index.get_loc(user_id)
-        similarities = user_similarity[user_idx]
-        similar_users_idx = np.argsort(similarities)[::-1][1:k_neighbors+1]
-        similar_users = user_item_matrix.index[similar_users_idx]
+df = load_data()
 
-        weighted_ratings = np.zeros(user_item_matrix.shape[1])
-        similarity_sum = np.zeros(user_item_matrix.shape[1])
+# ------------------ Matriz usuario-item y SVD ------------------
+user_item_matrix = df.pivot_table(index='UserID', columns='DestinationID', values='ExperienceRatingNormalizado', fill_value=0)
 
-        for i, neighbor_id in enumerate(similar_users):
-            sim = similarities[similar_users_idx[i]]
-            neighbor_ratings = user_item_matrix.loc[neighbor_id].values
-            weighted_ratings += sim * neighbor_ratings
-            similarity_sum += (neighbor_ratings > 0) * sim
+svd = TruncatedSVD(n_components=20, random_state=42)
+item_embeddings = svd.fit_transform(user_item_matrix.T)
+destination_similarity = cosine_similarity(item_embeddings)
 
-        with np.errstate(divide='ignore', invalid='ignore'):
-            predicted_ratings = np.true_divide(weighted_ratings, similarity_sum)
-            predicted_ratings[np.isnan(predicted_ratings)] = 0
+destination_indices = {dest: idx for idx, dest in enumerate(user_item_matrix.columns)}
+id_to_name = df.drop_duplicates("DestinationID").set_index("DestinationID")["Name_y"].to_dict()
 
-        user_rated = user_item_matrix.loc[user_id]
-        unrated_mask = user_rated == 0
-        unrated_ratings = predicted_ratings[unrated_mask.values]
-        unrated_destinations = user_item_matrix.columns[unrated_mask]
+# ------------------ Contenido destino ------------------
+destination_content = df[[
+    "DestinationID", "Name_y", "PopularityNormalizado", "PreferencesList", "Type", "BestTimeToVisit"
+]].drop_duplicates(subset=["DestinationID"])
 
-        # Crear DataFrame con predicciones completas antes del top_n
-        full_predictions = pd.DataFrame({
-            'DestinationID': unrated_destinations,
-            'PredictedRating': unrated_ratings
-        })
+mlb = MultiLabelBinarizer()
+prefs_encoded = pd.DataFrame(
+    mlb.fit_transform(destination_content["PreferencesList"]),
+    columns=[f"Pref_{c.strip().lower()}" for c in mlb.classes_]
+)
+prefs_encoded.index = destination_content.index
 
-        # Unir con datos del destino
-        merged = pd.merge(full_predictions, destinations_df, on='DestinationID', how='left')
+# One-hot encoding para 'Type' y 'BestTimeToVisit'
+dummies = pd.get_dummies(destination_content[["Type", "BestTimeToVisit"]])
+content_features = pd.concat([prefs_encoded, dummies, destination_content[["PopularityNormalizado"]]], axis=1)
 
-        # Filtrar filas que no lograron emparejar un destino válido
-        merged = merged[merged['Name'].notna()]
+# ------------------ Función de recomendación ------------------
+def recomendar_destinos(user_id=None, preferencias=None, top_n=5):
+    if user_id and user_id in user_item_matrix.index:
+        st.success("✅ Usuario conocido. Recomendaciones basadas en destinos similares a los visitados.")
+        user_ratings = user_item_matrix.loc[user_id]
+        rated_destinations = user_ratings[user_ratings > 0].index.tolist()
 
-        merged = merged[merged['PredictedRating'] > 0]
-
-        if merged.empty:
-            st.warning("No hay recomendaciones con puntuación positiva para mostrar.")
-            
-        # Eliminar duplicados por nombre y quedarnos con el de mayor predicted rating
-        merged = merged.sort_values('PredictedRating', ascending=False)
-        merged = merged.drop_duplicates(subset='Name', keep='first')
-
-        recommendations = merged.head(top_n).copy()
-        
-
-    else:
-        if user_preferences is None:
-            st.warning("Debes ingresar tus preferencias si eres un usuario nuevo.")
+        if not rated_destinations:
+            st.warning("Este usuario no tiene destinos valorados. Usa recomendaciones basadas en contenido.")
             return pd.DataFrame()
 
-        pref_str = (
-            user_preferences.get('Type', '') + ' ' +
-            user_preferences.get('State', '') + ' ' +
-            user_preferences.get('BestTimeToVisit', '') + ' ' +
-            user_preferences.get('Preferences', '')
-        ).lower()
+        scores = np.zeros(len(user_item_matrix.columns))
+        for dest_id in rated_destinations:
+            idx = destination_indices[dest_id]
+            scores += destination_similarity[idx] * user_ratings[dest_id]
 
-        pref_vector = vectorizer.transform([pref_str])
-        similarities = cosine_similarity(pref_vector, feature_matrix).flatten()
-        top_indices = np.argsort(similarities)[::-1]
+        scores_df = pd.DataFrame({
+            'DestinationID': user_item_matrix.columns,
+            'Score': scores
+        })
 
-        recommendations = destinations_df.iloc[top_indices].copy()
-        recommendations['PredictedRating'] = similarities[top_indices]
-        recommendations = recommendations[recommendations['PredictedRating'] > 0]
-       
+        scores_df = scores_df[~scores_df['DestinationID'].isin(rated_destinations)]
+        scores_df['Nombre'] = scores_df['DestinationID'].map(id_to_name)
+        scores_df = scores_df[scores_df['Score'] > 0]
+        scores_df = scores_df.drop_duplicates(subset='Nombre', keep='first')
+        scores_df = scores_df.sort_values(by='Score', ascending=False).head(top_n)
 
-        # Eliminar duplicados por nombre antes de seleccionar el top_n
-        recommendations = recommendations.sort_values("PredictedRating", ascending=False)
-        recommendations = recommendations.drop_duplicates(subset="Name", keep="first")
-        recommendations = recommendations.head(top_n).copy()
+        return scores_df[['Nombre', 'Score']]
 
-    return recommendations[['DestinationID', 'Name', 'Type', 'State', 'BestTimeToVisit', 'Popularity', 'PredictedRating']]
+    elif preferencias:
+        st.success("🧠 Usuario nuevo. Recomendaciones basadas en contenido.")
+        tipo = preferencias['Type'].lower()
+        epoca = preferencias['BestTimeToVisit'].lower()
+        palabras = [p.strip().lower() for p in preferencias['Preferences'].split(",")]
 
-# --------------------- Interfaz de usuario ---------------------
+        vector = np.zeros(content_features.shape[1])
+        for i, col in enumerate(content_features.columns):
+            if col == f"Type_{tipo}" or col == f"BestTimeToVisit_{epoca}" or col in [f"Pref_{p}" for p in palabras]:
+                if col in content_features.columns:
+                    vector[i] = 1
 
-st.sidebar.header("📋 Configuración de usuario")
-user_id_input = st.sidebar.text_input("ID de usuario", "")
-top_n = st.sidebar.slider("Número de recomendaciones", 1, 10, 5)
-k_neighbors = st.sidebar.slider("Número de vecinos similares (si aplica)", 1, 20, 10)
+        sims = cosine_similarity([vector], content_features.values).flatten()
+        top_idx = sims.argsort()[::-1]
 
+        recomendados = destination_content.iloc[top_idx].copy()
+        recomendados["Score"] = sims[top_idx]
+        recomendados.rename(columns={"Name_y": "Nombre"}, inplace=True)
+        recomendados = recomendados[recomendados["Score"] > 0]
+        recomendados = recomendados.drop_duplicates(subset="Nombre", keep="first")
+        recomendados = recomendados.head(top_n)
+
+        return recomendados[["Nombre", "Score"]]
+
+    else:
+        st.warning("🚫 No se proporcionó información suficiente.")
+        return pd.DataFrame()
+
+# ------------------ Interfaz ------------------
+st.sidebar.header("🎛️ Configuración")
+
+user_id_input = st.sidebar.text_input("ID de usuario (opcional)", "")
 try:
-    user_id = int(user_id_input)
+    user_id = str(int(user_id_input)) if user_id_input else None
 except ValueError:
     user_id = None
 
-if user_id is not None and user_id in user_item_matrix.index:
-    st.success("Usuario conocido. Generando recomendaciones basandonos en los gustos de otros usuarios con gustos parecidos a los tuyos")
-    recomendaciones = hybrid_recommend(user_id, user_item_matrix, user_similarity, destination_features,
-                                       feature_matrix, vectorizer, top_n=top_n, k_neighbors=k_neighbors)
-    recomendaciones = recomendaciones.rename(columns={
-            'Name': 'Nombre',
-            'Type': 'Tipo',
-            'State': 'Estado',
-            'BestTimeToVisit': 'Mejor época para visitar',
-            'Popularity': 'Popularidad',
-            'PredictedRating': 'Puntuación prevista'
-        })
-    st.dataframe(recomendaciones[['Nombre', 'Tipo', 'Estado', 'Mejor época para visitar', 'Popularidad', 'Puntuación prevista']])
+top_n = st.sidebar.slider("Número de recomendaciones", 1, 10, 5)
 
-else:
-    st.info("Usuario nuevo. Por favor ingresa tus preferencias. ")
-    col1, col2 = st.columns(2)
-    with col1:
-        tipo = st.selectbox("Tipo de destino", destination_features['Type'].unique())
-        estado = st.selectbox("Estado", destination_features['State'].unique())
-    with col2:
-        tiempo = st.selectbox("Mejor época para visitar", destination_features['BestTimeToVisit'].unique())
-        preferencias = st.text_input("Palabras clave (separadas por coma)", "Playa,Cultura")
+if not user_id:
+    st.sidebar.subheader("Preferencias del nuevo usuario")
+    tipo = st.sidebar.selectbox("Tipo de destino", sorted(df["Type"].dropna().unique()))
+    epoca = st.sidebar.selectbox("Mejor época para visitar", sorted(df["BestTimeToVisit"].dropna().unique()))
+    preferencias = st.sidebar.text_input("Preferencias (coma separadas)", "playa,cultura,naturaleza")
 
-    if st.button("Obtener recomendaciones"):
-        st.info("Estamos generando las mejores recomendaciones de acuerdo a tus preferencias")
+    if st.sidebar.button("Recomendar"):
         prefs = {
-            'Type': tipo,
-            'State': estado,
-            'BestTimeToVisit': tiempo,
-            'Preferences': preferencias
+            "Type": tipo,
+            "BestTimeToVisit": epoca,
+            "Preferences": preferencias
         }
-        recomendaciones = hybrid_recommend(user_id or 999999, user_item_matrix, user_similarity,
-                                           destination_features, feature_matrix, vectorizer,
-                                           user_preferences=prefs, top_n=top_n, k_neighbors=k_neighbors)
-        recomendaciones = recomendaciones.rename(columns={
-            'Name': 'Nombre',
-            'Type': 'Tipo',
-            'State': 'Estado',
-            'BestTimeToVisit': 'Mejor época para visitar',
-            'Popularity': 'Popularidad',
-            'PredictedRating': 'Puntuación prevista'
-        })
-        st.dataframe(recomendaciones[['Nombre', 'Tipo', 'Estado', 'Mejor época para visitar', 'Popularidad', 'Puntuación prevista']])
+        resultados = recomendar_destinos(user_id=None, preferencias=prefs, top_n=top_n)
+        st.subheader("📌 Recomendaciones basadas en contenido")
+        st.dataframe(resultados)
+    else: 
+        st.warning("Es posible que se tengan menos destinos recomendados que el número de destinos que usted solicite, estamos trabajando para ofrecerle más destinos en un futuro cercano.")
+
+    
+    
+elif user_id:
+    resultados = recomendar_destinos(user_id=user_id, top_n=top_n)
+    st.subheader("📌 Recomendaciones personalizadas")
+    st.dataframe(resultados)
