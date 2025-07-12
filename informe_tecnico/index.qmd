@@ -65,3 +65,60 @@ Desarrollar un sistema inteligente integrado basado en aprendizaje profundo que 
 4. **Diseñar una herramienta web interactiva** que integre los tres módulos desarrollados, permitiendo la visualización de predicciones, la clasificación de imágenes y la generación de recomendaciones de manera accesible para los usuarios y administradores de la empresa.
 5. **Documentar el proceso completo de desarrollo** en un informe técnico.
 
+# Punto 1
+## Revisión y tratamiento del dataset
+Inicialmente se tomó todos los datasets para el desarrollo del trabajo y se combinaron en uno solo para simplificar la revisión de los mismos, ser reviso la existencia de duplicados y valores nulos. Posteriormente se sacó una gráfica inicial para visualizar cuales son los destinos populares, de esto también se encontró que solo hay 5 destinos posibles en la base datos. Aquí la gráfica mencionada 
+
+```{=html}
+ <img src="imagenes/DestinosPopulares.png" alt="Gráfica 1: Destinos populares" />
+```
+Luego se revisó cuantos usuarios en total había, 642 en total y el usuario con más visitas registradas tenía 6 mientras que el segundo y el tercero 5 y 4 respectivamente; para facilitar el trabajo y análisis del dataset se convirtió el dato de 'VisitDate0 a un datetime ya que con este se crearía la serie de tiempo para la realización del primer punto. ADemás, se hizo un timado uniforme para las variables de 'UserID' y 'DestinationId' para tratarlas como strings y así garantizar la consistencia, calidad y eficiencia del modelo, se revisó también el número de viajes por destino en la gráfica 2. Ahora, se hizo la creación de la serie de tiempo agregada agrupando por día y destino, contando el número de viajes y ordenando los datos por fecha.
+
+```{=html}
+ <img src="imagenes/NúmeroViajesDestino.png" alt="Gráfica 2: Número de viajes por destino" />
+```
+De está gráfica podemos ver que el dataset tiene una distribución muy equitativa entre los destinos, pues no hay mucha diferencia entre el número de viajes de cada uno. 
+
+Para crear la serie se filtró el viaje con más destinos para modelar y luego se tomaron los datos de este destino, luego, se creó un rango continuo de fechas de lo cual también se encontró que el dataset solo usaba 3 fechas, con este rango de fechas y los datos del destino top se reindexaron ambos para asegurar la continuidad temporal. Posteriormente, se removieron los valores nulos o vácios y se hizo una revisión de la serie de tiempo. Empezando ahora con la creación del modelo Prophet, se decidió usar este modelo porque la cantidad de datos del dataset era pequeña y además el hecho de que solo tuviese 3 fechas en la serie de tiempo haría que las aproximaciones no fueran tan precisas el modelo prophet es excelente para prototipar y trabajar con pocos datos (1). Se hizó una gráfica inicial para revisar el forecast del modelo para el destino Kerala BackWaters:
+
+```{=html}
+ <img src="imagenes/PredicciónProphetKeralaBackWaters.png" alt="Gráfica 3: Predicción de demanda para Kerala Backwaters" />
+```
+Según la predicción habrá un crecimiento constante en la demanda de viajes con destino a Kerala pero va a tener ciertas variaciones estacionales. Luego de hacer este ejemplo inicial de predicción para una ciudad, se hizo una predicción para las otras 5 ciudades y se unieron todas estas predicciones en un dataset y para visualizar los resultados esto se hizo una gráfica con la proyección para los próximos 30 días de los 5 destinos:
+
+```{=html}
+ <img src="imagenes/ProyecciónDemanda30Dias.png" alt="Gráfica 4: Proyección de demanda para los próximos 30 días " />
+```
+De la gráfica se puede notar que el destino con mayor probabilidad de crecer en demanda en los siguientes 30 días será 'Jaipur City', mientras que los destinos 'Leh Ladakh', 'Taj Mahal' y 'Goa Beaches' tendrán una disminución en su demanda, por último, 'Kerala Backwaters' también tendrá un pequeño crecimiento en la demanda.
+
+Finalmente, pasando a las métricas de evaluación del modelo (RMSE y MAE) se presentan los resultados en la siguiente tabla y gráficas por cada destino:
+
+Kerala Backwaters - RMSE: 3.89 | MAE: 3.65
+Taj Mahal - RMSE: 1.81 | MAE: 1.69
+Leh Ladakh - RMSE: 0.00 | MAE: 0.00
+Goa Beaches - RMSE: 2.68 | MAE: 2.52
+Jaipur City - RMSE: 0.00 | MAE: 0.00
+
+```{=html}
+ <img src="imagenes/MetricasPorDestino.png" alt="Gráfica 5: Predicción vs Real para cada destino " />
+```
+De estas gráficas vemos que la predicción se acerca mucho al valor real para dos de los destinos del dataset, mientras que para los otros 3 destinos probablemente sería necesario más datos y fechas para encontrar una predicción más acertada, esto lo podemos confirmar con los valores de la tabla del RMSE y el MAE pues los dos destinos con menores valores de estas métricas son los que tienen mejores predicciones en las gráficas. Por otro lado, el destino con más visitas es el destino con peor ajuste del modelo.
+
+Por último, se almacenaron las predicciones por ciudad y se hizo una gráfica de los componentes para cada ciudad:
+
+```{=html}
+ <img src="imagenes/MetricasPorDestino.png" alt="Gráfica 6:  " />
+```
+
+
+
+
+
+
+
+
+
+
+
+#Referencias 
+  1. Taylor SJ, Letham B. 2017. Forecasting at scale. PeerJ Preprints 5:e3190v2 https://doi.org/10.7287/peerj.preprints.3190v2
