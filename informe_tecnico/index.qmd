@@ -107,14 +107,65 @@ De estas gráficas vemos que la predicción se acerca mucho al valor real para d
 Por último, se almacenaron las predicciones por ciudad y se hizo una gráfica de los componentes para cada ciudad:
 
 ```{=html}
- <img src="imagenes/MetricasPorDestino.png" alt="Gráfica 6:  " />
+ <img src="imagenes/ComponentesGoaBeaches.png" alt="Gráfica 6: Componentes destino Goa Beaches " />
+ <img src="imagenes/ComponentesJaipurCity.png" alt="Gráfica 7: Componentes destino Jaipur City" />
+ <img src="imagenes/ComponentesKeralaBackwaters.png" alt="Gráfica 8: Componentes destino Kerala Backwaters" />
+ <img src="imagenes/ComponentesLehLadakh.png" alt="Gráfica 9: Componentes destino Leh Ladakh" />
+ <img src="imagenes/ComponentesTajMahal.png" alt="Gráfica 10: Componentes destino Taj Mahal" />
 ```
+Aunque el dataset tiene un número limitado de fechas, se observan algunos indicios de variaciones diarias que podrían interpretarse como patrones estacionales si tuviéramos más datos. Prophet permite visualizar las componentes de tendencia, estacionalidad y efectos semanales o anuales. En este caso, no se observan componentes significativos por la escasez de datos, pero el modelo está correctamente estructurado para captarlas si se amplía la serie temporal.
 
 
+#Punto 2
 
 
+#Punto 3
 
+Se utilizaron técnicas de filtrado colaborativo, recomendación basada en contenido y un enfoque híbrido para mejorar la personalización de las sugerencias de viaje. 
+Para este punto se siguió trabajando con el dataset ya procesado y combinando todos los datasets, se hizo un filtrado colaborativo con la matriz user_item_matrix, se normalizó 
+las columnas categóricas del dataset y usando TruncatedSVd se redujo la dimensionalidad y se calculó la matriz de similitud entre destinos con el coseno que muestra la similitud entre los destinos según sus características. Se creó un diccionario para traducir identificadores de destino a índices y luego se creó un dataframe con las características de los destinos que se usarán para el filtrado basado en contenido, las características son las siguientes:
+PopularityNormalizado: Popularidad del destino (normalizada).
+PreferencesList: Lista de preferencias asociadas al destino (por ejemplo, ["playa", "aventura"]).
+Type: Tipo de destino (por ejemplo, "playa", "ciudad").
+BestTimeToVisit: Mejor momento para visitar (por ejemplo, "verano", "invierno").
+con las columnas relevantes y usando un MultiLabelBinarizer se creó un dataframe con "PreferencesList" que está compuesta por columnas binarias que representan las preferencias de cada destino.
+Luego se convirtieron las variables categóricas en un formato númerico para incluirlas en el cálculo de similitud basado en contenido, se creó un dataframe unificado que contuviese todas las características númericas de los destinos 
+listo para el cálculo de similitud basado en contenido. Posteriormente, se aseguró que todas las columnas sean compatibles con cálculos númericos posteriores y se hizó un cálculo de similitud basado en contenido.
 
+Continuando, se creó la función para hacer la recomendación de destinos para usuarios en el dataset, la función "recommend_destinations" recibe 3 parámetros:
+1. El id del usuario.
+2. El número de destinos a recomendar (por defecto 5)
+3. El peso para combinar los puntajes de filtrado colaborativo y basado en contenido (por defecto 0.5, lo que da igual importancia a ambos).
+La función recommend_destinations genera recomendaciones personalizadas para un usuario combinando:
+
+Filtrado colaborativo: Usa la matriz de similitud destination_similarity (basada en interacciones de usuarios) para puntuar destinos según su similitud con los destinos visitados.
+Filtrado basado en contenido: Usa la matriz de similitud user_similarity (basada en características de los destinos) para puntuar destinos según su similitud con los destinos visitados.
+Enfoque híbrido: Combina ambos puntajes usando el parámetro alpha para equilibrar la importancia de cada enfoque.
+Postprocesamiento: Excluye destinos ya visitados, agrega nombres legibles, promedia puntajes si es necesario, y selecciona los top_n destinos con mayor puntaje.
+
+Ahora, se creó la función para recomendar por perfil, esta solo recibe el perfil del usuario, como por ejemplo:
+user_profile = {
+    "Preferences": "Nature, Adventure",
+    "Gender": "Female",
+    "NumberOfAdults": 2,
+    "NumberOfChildren": 1
+}
+La función recommend_by_profile genera recomendaciones basadas en un perfil de usuario que especifica preferencias (por ejemplo, "playa, aventura"). Funciona así:
+
+Construye un vector de usuario:
+Codifica las preferencias del usuario como un vector binario (pref_vec).
+Usa valores por defecto (ceros) para el tipo de destino y el mejor momento para visitar.
+Asigna la popularidad promedio para PopularityNormalizado.
+Calcula similitud: Compara el vector del usuario con los vectores de los destinos usando la similitud del coseno.
+Selecciona los mejores: Ordena los destinos por similitud y devuelve los top_n más relevantes.
+Posibles mejoras:
+No utiliza información sobre el tipo de destino (Type) ni el mejor momento para visitar (BestTimeToVisit) del perfil del usuario, ya que type_vec y time_vec se inicializan en ceros. Esto podría mejorarse si el user_profile incluyera estas preferencias.
+La popularidad se establece como el promedio, lo que podría no reflejar las preferencias reales del usuario.
+
+Por último, se hizo el cálculo de las métricas de las recomendaciones generando 50 usuarios con perfiles al azar y se llegó a estos resultados:
+=== Métricas de evaluación global (promedio sobre perfiles aleatorios) ===
+Precision promedio global: 0.279
+Recall promedio global: 0.655
 
 
 
