@@ -34,7 +34,7 @@ git lfs install
 python -m venv .venv
 # Windows
 .venv\Scripts\activate
-setup
+setup.sh
 
 # macOS/Linux
 source .venv/bin/activate
