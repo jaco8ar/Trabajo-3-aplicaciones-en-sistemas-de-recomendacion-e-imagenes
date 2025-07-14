@@ -166,7 +166,8 @@ Por último, se hizo el cálculo de las métricas de las recomendaciones generan
 === Métricas de evaluación global (promedio sobre perfiles aleatorios) ===
 Precision promedio global: 0.279
 Recall promedio global: 0.655
-
+La precisión baja indica que muchas recomendaciones no son relevantes, lo cual se podría mejorar generando más perfiles u optimizando más la función de recomendación.
+El recall es moderamente bueno, señalando que el modelo captura una buena parte de los destinos relevantes, pero a costa de incluir algunos destinos irrelevantes.
 
 
 
