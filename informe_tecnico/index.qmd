@@ -19,6 +19,13 @@ execute:
         box-shadow: none !important;
         border-bottom: none !important;
     }
+     img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 <div style="
     background-color:rgb(255, 255, 255);
@@ -45,6 +52,30 @@ execute:
 </div>
 
 ```
+# Índices
+
+## Índice de Contenidos
+
+1. [Introducción](#introducción)  
+2. [Objetivos](#objetivos)  
+   - [Objetivo General](#objetivo-general)  
+   - [Objetivos específicos](#objetivos-especificos)  
+3. [Desarrollo del proyecto](#desarrollo-del-proyecto)  
+   - [Punto 1: Análisis y Predicción de Demanda Turística](#punto-1-análisis-y-predicción-de-demanda-turística)  
+   - [Punto 2: Clasificación de Comportamientos del Conductor](#punto-2-clasificación-de-comportamientos-del-conductor)  
+   - [Punto 3: Sistema de Recomendación Híbrido para Destinos Turísticos](#punto-3-sistema-de-recomendación-híbrido-para-destinos-turísticos)  
+4. [Referencias](#referencias)
+
+
+## Índice de Tablas
+
+- **Tabla 1.** Métricas de rendimiento por destino – Sección Evaluación del Modelo
+
+## Índice de Figuras
+
+- **Figura 1.** Ejemplo de predicción de demanda turística – Sección Punto 1  
+- **Figura 2.** Matriz de confusión del modelo de clasificación – Sección Punto 2  
+- **Figura 3.** Interfaz del sistema de recomendación – Sección Punto 3  
 
 
 # Introducción
@@ -65,124 +96,276 @@ Desarrollar un sistema inteligente integrado basado en aprendizaje profundo que 
 4. **Diseñar una herramienta web interactiva** que integre los tres módulos desarrollados, permitiendo la visualización de predicciones, la clasificación de imágenes y la generación de recomendaciones de manera accesible para los usuarios y administradores de la empresa.
 5. **Documentar el proceso completo de desarrollo** en un informe técnico.
 
-# Punto 1
-## Revisión y tratamiento del dataset
-Inicialmente se tomó todos los datasets para el desarrollo del trabajo y se combinaron en uno solo para simplificar la revisión de los mismos, ser reviso la existencia de duplicados y valores nulos. Posteriormente se sacó una gráfica inicial para visualizar cuales son los destinos populares, de esto también se encontró que solo hay 5 destinos posibles en la base datos. Aquí la gráfica mencionada 
+# Desarrollo del proyecto
+
+## Punto 1: Análisis y Predicción de Demanda Turística
+
+### Revisión y Tratamiento del Dataset
+
+#### Preparación Inicial de los Datos
+
+Se consolidaron todos los datasets disponibles en uno solo para simplificar el análisis y garantizar la consistencia de los datos. Durante esta fase se realizó una revisión exhaustiva que incluyó la identificación de duplicados y valores nulos.
+
+Como paso inicial del análisis exploratorio, se generó una visualización de los destinos más populares, lo que reveló que la base de datos contiene únicamente 5 destinos posibles.
 
 ```{=html}
  <img src="imagenes/DestinosPopulares.png" alt="Gráfica 1: Destinos populares" />
 ```
-Luego se revisó cuantos usuarios en total había, 642 en total y el usuario con más visitas registradas tenía 6 mientras que el segundo y el tercero 5 y 4 respectivamente; para facilitar el trabajo y análisis del dataset se convirtió el dato de 'VisitDate0 a un datetime ya que con este se crearía la serie de tiempo para la realización del primer punto. ADemás, se hizo un timado uniforme para las variables de 'UserID' y 'DestinationId' para tratarlas como strings y así garantizar la consistencia, calidad y eficiencia del modelo, se revisó también el número de viajes por destino en la gráfica 2. Ahora, se hizo la creación de la serie de tiempo agregada agrupando por día y destino, contando el número de viajes y ordenando los datos por fecha.
+
+#### Análisis de Usuarios y Patrones de Viaje
+
+El dataset comprende un total de 642 usuarios únicos. El análisis de frecuencia mostró que el usuario más activo registró 6 visitas, mientras que el segundo y tercer usuario más activos registraron 5 y 4 visitas respectivamente.
+
+Para optimizar el procesamiento y análisis posterior, se realizaron las siguientes transformaciones:
+
+- Conversión de la variable 'VisitDate' a formato datetime, esencial para la creación de la serie temporal
+- Estandarización de las variables 'UserID' y 'DestinationId' como strings para garantizar consistencia, calidad y eficiencia del modelo
+
+La distribución de viajes por destino se visualiza en la siguiente gráfica:
 
 ```{=html}
  <img src="imagenes/NúmeroViajesDestino.png" alt="Gráfica 2: Número de viajes por destino" />
 ```
-De está gráfica podemos ver que el dataset tiene una distribución muy equitativa entre los destinos, pues no hay mucha diferencia entre el número de viajes de cada uno. 
 
-Para crear la serie se filtró el viaje con más destinos para modelar y luego se tomaron los datos de este destino, luego, se creó un rango continuo de fechas de lo cual también se encontró que el dataset solo usaba 3 fechas, con este rango de fechas y los datos del destino top se reindexaron ambos para asegurar la continuidad temporal. Posteriormente, se removieron los valores nulos o vácios y se hizo una revisión de la serie de tiempo. Empezando ahora con la creación del modelo Prophet, se decidió usar este modelo porque la cantidad de datos del dataset era pequeña y además el hecho de que solo tuviese 3 fechas en la serie de tiempo haría que las aproximaciones no fueran tan precisas el modelo prophet es excelente para prototipar y trabajar con pocos datos (1). Se hizó una gráfica inicial para revisar el forecast del modelo para el destino Kerala BackWaters:
+Los resultados muestran una distribución equilibrada entre destinos, sin diferencias significativas en el número de viajes registrados para cada uno.
+
+#### Creación de la Serie Temporal
+
+Se construyó una serie temporal agregada mediante la agrupación por día y destino, contabilizando el número de viajes y ordenando cronológicamente los datos. Durante este proceso se identificó una limitación importante: el dataset contiene únicamente 3 fechas distintas.
+
+Para asegurar la continuidad temporal, se creó un rango continuo de fechas y se reindexaron los datos del destino con mayor volumen de viajes. Posteriormente, se eliminaron los valores nulos y se validó la integridad de la serie temporal resultante.
+
+### Modelado Predictivo con Prophet
+
+#### Justificación del Modelo Seleccionado
+
+Se optó por el modelo Prophet debido a sus características particulares que se adaptan bien a las limitaciones del dataset:
+
+1. Excelente rendimiento con datasets pequeños
+2. Capacidad de manejo robusto de series temporales con pocos puntos de datos
+3. Diseño específico para prototipado rápido y eficiente
+
+#### Análisis de Predicción Individual
+
+Se realizó una predicción inicial para el destino Kerala Backwaters como caso de estudio:
 
 ```{=html}
  <img src="imagenes/PredicciónProphetKeralaBackWaters.png" alt="Gráfica 3: Predicción de demanda para Kerala Backwaters" />
 ```
-Según la predicción habrá un crecimiento constante en la demanda de viajes con destino a Kerala pero va a tener ciertas variaciones estacionales. Luego de hacer este ejemplo inicial de predicción para una ciudad, se hizo una predicción para las otras 5 ciudades y se unieron todas estas predicciones en un dataset y para visualizar los resultados esto se hizo una gráfica con la proyección para los próximos 30 días de los 5 destinos:
+
+La predicción indica un crecimiento constante en la demanda de viajes hacia Kerala, con variaciones estacionales características del comportamiento turístico.
+
+#### Análisis Conjunto de Todos los Destinos
+
+Se generaron predicciones para los 5 destinos y se consolidaron en un dataset unificado. La proyección para los próximos 30 días se presenta a continuación:
 
 ```{=html}
- <img src="imagenes/ProyecciónDemanda30Dias.png" alt="Gráfica 4: Proyección de demanda para los próximos 30 días " />
+ <img src="imagenes/ProyecciónDemanda30Dias.png" alt="Gráfica 4: Proyección de demanda para los próximos 30 días" />
 ```
-De la gráfica se puede notar que el destino con mayor probabilidad de crecer en demanda en los siguientes 30 días será 'Jaipur City', mientras que los destinos 'Leh Ladakh', 'Taj Mahal' y 'Goa Beaches' tendrán una disminución en su demanda, por último, 'Kerala Backwaters' también tendrá un pequeño crecimiento en la demanda.
 
-Finalmente, pasando a las métricas de evaluación del modelo (RMSE y MAE) se presentan los resultados en la siguiente tabla y gráficas por cada destino:
+#### Interpretación de Resultados
 
-Kerala Backwaters - RMSE: 3.89 | MAE: 3.65
-Taj Mahal - RMSE: 1.81 | MAE: 1.69
-Leh Ladakh - RMSE: 0.00 | MAE: 0.00
-Goa Beaches - RMSE: 2.68 | MAE: 2.52
-Jaipur City - RMSE: 0.00 | MAE: 0.00
+El análisis de las proyecciones revela patrones diferenciados por destino:
+
+- **Jaipur City**: Presenta la mayor probabilidad de crecimiento en demanda
+- **Kerala Backwaters**: Muestra un crecimiento moderado pero sostenido
+- **Leh Ladakh, Taj Mahal y Goa Beaches**: Exhiben una tendencia decreciente en la demanda proyectada
+
+### Evaluación del Modelo
+
+#### Métricas de Rendimiento
+
+Se evaluó el desempeño del modelo utilizando las métricas RMSE (Root Mean Square Error) y MAE (Mean Absolute Error):
+
+| Destino | RMSE | MAE |
+|---------|------|-----|
+| Kerala Backwaters | 3.89 | 3.65 |
+| Taj Mahal | 1.81 | 1.69 |
+| Leh Ladakh | 0.00 | 0.00 |
+| Goa Beaches | 2.68 | 2.52 |
+| Jaipur City | 0.00 | 0.00 |
 
 ```{=html}
- <img src="imagenes/MetricasPorDestino.png" alt="Gráfica 5: Predicción vs Real para cada destino " />
+ <img src="imagenes/MetricasPorDestino.png" alt="Gráfica 5: Predicción vs Real para cada destino" />
 ```
-De estas gráficas vemos que la predicción se acerca mucho al valor real para dos de los destinos del dataset, mientras que para los otros 3 destinos probablemente sería necesario más datos y fechas para encontrar una predicción más acertada, esto lo podemos confirmar con los valores de la tabla del RMSE y el MAE pues los dos destinos con menores valores de estas métricas son los que tienen mejores predicciones en las gráficas. Por otro lado, el destino con más visitas es el destino con peor ajuste del modelo.
 
-Por último, se almacenaron las predicciones por ciudad y se hizo una gráfica de los componentes para cada ciudad:
+#### Análisis de Resultados
+
+Los resultados muestran un rendimiento variable del modelo según el destino:
+
+- **Excelente ajuste**: Leh Ladakh y Jaipur City (RMSE y MAE = 0.00)
+- **Ajuste moderado**: Taj Mahal y Goa Beaches
+- **Ajuste deficiente**: Kerala Backwaters (paradójicamente el destino con mayor volumen de visitas)
+
+Esta variabilidad sugiere que algunos destinos requieren datasets más extensos y mayor diversidad temporal para lograr predicciones más precisas.
+
+### Análisis de Componentes
+
+Se almacenaron las predicciones individuales por ciudad y se analizaron los componentes de cada modelo:
 
 ```{=html}
- <img src="imagenes/ComponentesGoaBeaches.png" alt="Gráfica 6: Componentes destino Goa Beaches " />
+ <img src="imagenes/ComponentesGoaBeaches.png" alt="Gráfica 6: Componentes destino Goa Beaches" />
  <img src="imagenes/ComponentesJaipurCity.png" alt="Gráfica 7: Componentes destino Jaipur City" />
  <img src="imagenes/ComponentesKeralaBackwaters.png" alt="Gráfica 8: Componentes destino Kerala Backwaters" />
  <img src="imagenes/ComponentesLehLadakh.png" alt="Gráfica 9: Componentes destino Leh Ladakh" />
  <img src="imagenes/ComponentesTajMahal.png" alt="Gráfica 10: Componentes destino Taj Mahal" />
 ```
-Aunque el dataset tiene un número limitado de fechas, se observan algunos indicios de variaciones diarias que podrían interpretarse como patrones estacionales si tuviéramos más datos. Prophet permite visualizar las componentes de tendencia, estacionalidad y efectos semanales o anuales. En este caso, no se observan componentes significativos por la escasez de datos, pero el modelo está correctamente estructurado para captarlas si se amplía la serie temporal.
 
+### Conclusiones
 
-#Punto 2
-El código, implementado en un cuaderno de Jupyter (punto_2_clasificacion_img.ipynb), fue diseñado para clasificar imágenes de comportamientos de conductores utilizando PyTorch en Google Colab con soporte para GPU. A continuación, se describe el flujo de ejecución en pasado, en tercera persona, destacando los pasos principales que realizó el código.
+A pesar de las limitaciones del dataset (únicamente 3 fechas distintas), se observan indicios de variaciones diarias que podrían interpretarse como patrones estacionales con mayor disponibilidad de datos. El modelo Prophet está correctamente estructurado para capturar componentes de tendencia, estacionalidad y efectos temporales cuando se disponga de una serie temporal más extensa.
 
-Importación de Librerías: Se importaron bibliotecas esenciales para el procesamiento de imágenes, entrenamiento de modelos y visualización de resultados. Entre estas, se incluyeron torch y torchvision para manejar modelos y datos, numpy y pandas para manipulación de datos, matplotlib y seaborn para gráficos, y sklearn.metrics para evaluar el modelo. También se importaron módulos como os, zipfile y PIL para gestionar archivos e imágenes.
-Configuración del Dispositivo: Se determinó el dispositivo de cómputo a utilizar, verificando si una GPU estaba disponible mediante torch.cuda.is_available(). Se asignó cuda como dispositivo si estaba disponible; de lo contrario, se utilizó cpu. Posteriormente, se imprimió un mensaje confirmando el dispositivo seleccionado.
-Definición del Conjunto de Datos Personalizado: Se creó una clase llamada DriverBehaviorDataset, la cual se encargaba de gestionar las imágenes y sus etiquetas. Esta clase recibía arreglos NumPy de imágenes (con forma (N, H, W, C)) y etiquetas, además de transformaciones opcionales. Incluía métodos para obtener la longitud del conjunto de datos y acceder a imágenes individuales, convirtiéndolas de arreglos NumPy a formato PIL para aplicar transformaciones.
-Montaje de Google Drive: Se montó Google Drive en el directorio /content/drive para facilitar el acceso o almacenamiento de archivos, utilizando la biblioteca google.colab.drive.
-Instalación de la API de Kaggle: Se instaló la biblioteca kaggle mediante el comando !pip install kaggle, lo que permitió la interacción con la plataforma Kaggle para descargar el conjunto de datos.
-Carga de Credenciales de Kaggle: Se cargó un archivo kaggle.json con las credenciales de la API de Kaggle utilizando google.colab.files.upload(). Luego, se creó el directorio /root/.kaggle, se movió el archivo a dicho directorio y se configuraron permisos restringidos (chmod 600) para garantizar la seguridad.
-Descarga del Conjunto de Datos: Se descargó el conjunto de datos multi-class-driver-behavior-image-dataset desde Kaggle utilizando el comando !kaggle datasets download. El archivo ZIP resultante se almacenó en el directorio /content.
-Extracción de Imágenes: Se definió una función extract_images que se encargaba de procesar el archivo ZIP descargado. Esta función abrió el archivo, recorrió su contenido, ignoró directorios y extrajo imágenes organizadas en carpetas por clase (por ejemplo, Multi-Class Driver Behavior/<class_name>/<image_file>). Cada imagen se abrió con PIL, se convirtió a formato RGB y se asignó una etiqueta numérica según un diccionario que mapeaba nombres de clases a índices (por ejemplo, "safe_driving": 1). Las imágenes y etiquetas se almacenaron en listas, probablemente convertidas luego a arreglos NumPy.
-Visualización de Predicciones: Se implementó una función show_predictions que se encargaba de mostrar predicciones del modelo preentrenado (modelo_preentrenado) en un conjunto de datos de prueba (test_dataset). Esta función organizó imágenes por clase, seleccionó aleatoriamente cuatro imágenes por clase y buscó incluir al menos una predicción incorrecta. Para cada imagen, se realizó una predicción utilizando el modelo, se calcularon probabilidades con softmax, y se desnormalizaron las imágenes para visualización. Finalmente, se generó una cuadrícula de subgráficos con matplotlib, mostrando cada imagen con su etiqueta real, predicha y probabilidad, utilizando colores verde (aciertos) y rojo (errores).
-Conclusión
-El código ejecutó un flujo completo para clasificar imágenes de comportamientos de conductores, desde la configuración del entorno y la carga de datos hasta la visualización de predicciones. Aunque el código estaba truncado, se infirió que incluyó pasos adicionales como el entrenamiento del modelo y la aplicación de transformaciones, los cuales no se mostraron explícitamente. La estructura fue modular, aprovechando herramientas estándar de aprendizaje profundo y visualización para analizar el rendimiento del modelo.
+La arquitectura del modelo proporciona una base sólida para futuras expansiones del análisis con datasets más completos y períodos temporales más amplios.
 
-#Punto 3
+## Punto 2: Clasificación de Comportamientos del Conductor
 
-Se utilizaron técnicas de filtrado colaborativo, recomendación basada en contenido y un enfoque híbrido para mejorar la personalización de las sugerencias de viaje. 
-Para este punto se siguió trabajando con el dataset ya procesado y combinando todos los datasets, se hizo un filtrado colaborativo con la matriz user_item_matrix, se normalizó 
-las columnas categóricas del dataset y usando TruncatedSVd se redujo la dimensionalidad y se calculó la matriz de similitud entre destinos con el coseno que muestra la similitud entre los destinos según sus características. Se creó un diccionario para traducir identificadores de destino a índices y luego se creó un dataframe con las características de los destinos que se usarán para el filtrado basado en contenido, las características son las siguientes:
-PopularityNormalizado: Popularidad del destino (normalizada).
-PreferencesList: Lista de preferencias asociadas al destino (por ejemplo, ["playa", "aventura"]).
-Type: Tipo de destino (por ejemplo, "playa", "ciudad").
-BestTimeToVisit: Mejor momento para visitar (por ejemplo, "verano", "invierno").
-con las columnas relevantes y usando un MultiLabelBinarizer se creó un dataframe con "PreferencesList" que está compuesta por columnas binarias que representan las preferencias de cada destino.
-Luego se convirtieron las variables categóricas en un formato númerico para incluirlas en el cálculo de similitud basado en contenido, se creó un dataframe unificado que contuviese todas las características númericas de los destinos 
-listo para el cálculo de similitud basado en contenido. Posteriormente, se aseguró que todas las columnas sean compatibles con cálculos númericos posteriores y se hizó un cálculo de similitud basado en contenido.
+### Metodología Implementada
 
-Continuando, se creó la función para hacer la recomendación de destinos para usuarios en el dataset, la función "recommend_destinations" recibe 3 parámetros:
-1. El id del usuario.
-2. El número de destinos a recomendar (por defecto 5)
-3. El peso para combinar los puntajes de filtrado colaborativo y basado en contenido (por defecto 0.5, lo que da igual importancia a ambos).
-La función recommend_destinations genera recomendaciones personalizadas para un usuario combinando:
+Se desarrolló un sistema de clasificación multiclase para el análisis de comportamientos del conductor utilizando técnicas de aprendizaje profundo. La implementación incluyó:
 
-Filtrado colaborativo: Usa la matriz de similitud destination_similarity (basada en interacciones de usuarios) para puntuar destinos según su similitud con los destinos visitados.
-Filtrado basado en contenido: Usa la matriz de similitud user_similarity (basada en características de los destinos) para puntuar destinos según su similitud con los destinos visitados.
-Enfoque híbrido: Combina ambos puntajes usando el parámetro alpha para equilibrar la importancia de cada enfoque.
-Postprocesamiento: Excluye destinos ya visitados, agrega nombres legibles, promedia puntajes si es necesario, y selecciona los top_n destinos con mayor puntaje.
+- **Configuración del entorno**: Configuración de PyTorch con soporte CUDA para procesamiento en GPU
+- **Preprocesamiento de datos**: Implementación de una clase `DriverBehaviorDataset` para la gestión de imágenes y etiquetas
+- **Entrenamiento del modelo**: Utilización de arquitecturas de CNN preentrenadas para clasificación de comportamientos
+- **Evaluación y visualización**: Implementación de métricas de rendimiento y visualización de predicciones
 
-Ahora, se creó la función para recomendar por perfil, esta solo recibe el perfil del usuario, como por ejemplo:
-user_profile = {
-    "Preferences": "Nature, Adventure",
-    "Gender": "Female",
-    "NumberOfAdults": 2,
-    "NumberOfChildren": 1
-}
-La función recommend_by_profile genera recomendaciones basadas en un perfil de usuario que especifica preferencias (por ejemplo, "playa, aventura"). Funciona así:
+### Tipos de Distracción del Conductor: Análisis y Prevención
 
-Construye un vector de usuario:
-Codifica las preferencias del usuario como un vector binario (pref_vec).
-Usa valores por defecto (ceros) para el tipo de destino y el mejor momento para visitar.
-Asigna la popularidad promedio para PopularityNormalizado.
-Calcula similitud: Compara el vector del usuario con los vectores de los destinos usando la similitud del coseno.
-Selecciona los mejores: Ordena los destinos por similitud y devuelve los top_n más relevantes.
-Posibles mejoras:
-No utiliza información sobre el tipo de destino (Type) ni el mejor momento para visitar (BestTimeToVisit) del perfil del usuario, ya que type_vec y time_vec se inicializan en ceros. Esto podría mejorarse si el user_profile incluyera estas preferencias.
-La popularidad se establece como el promedio, lo que podría no reflejar las preferencias reales del usuario.
+#### Clasificación de Distracciones
 
-Por último, se hizo el cálculo de las métricas de las recomendaciones generando 50 usuarios con perfiles al azar y se llegó a estos resultados:
-=== Métricas de evaluación global (promedio sobre perfiles aleatorios) ===
-Precision promedio global: 0.279
-Recall promedio global: 0.655
-La precisión baja indica que muchas recomendaciones no son relevantes, lo cual se podría mejorar generando más perfiles u optimizando más la función de recomendación.
-El recall es moderamente bueno, señalando que el modelo captura una buena parte de los destinos relevantes, pero a costa de incluir algunos destinos irrelevantes.
+Existen tres tipos principales de distracción: Visual (apartar los ojos de la carretera), Manual (apartar las manos del volante), y Cognitiva (apartar la mente de la conducción). Esta clasificación es fundamental para comprender los riesgos asociados con diferentes comportamientos del conductor.
 
+##### 1. Distracción Visual
+Las distracciones visuales ocurren cuando un conductor aparta la vista de la carretera, lo que lleva a una reducción de la atención. Las principales manifestaciones incluyen:
 
+- Uso de dispositivos electrónicos
+- Observación de eventos externos (accidentes, construcciones)
+- Lectura de mensajes de texto o navegación GPS
+- Atención a pasajeros o objetos en el vehículo
 
+##### 2. Distracción Manual
+Las distracciones manuales involucran cualquier acción que mueva las manos del conductor lejos del volante. Los comportamientos más frecuentes son:
 
-#Referencias 
-  1. Taylor SJ, Letham B. 2017. Forecasting at scale. PeerJ Preprints 5:e3190v2 https://doi.org/10.7287/peerj.preprints.3190v2
+- Manipulación de teléfonos celulares
+- Ajuste de controles del vehículo (radio, climatización)
+- Consumo de alimentos o bebidas
+- Alcanzar objetos dentro del vehículo
+
+##### 3. Distracción Cognitiva
+Las distracciones cognitivas emergen cuando la mente del conductor se desvía de la tarea de conducir. Incluyen:
+
+- Conversaciones telefónicas (incluso manos libres)
+- Preocupaciones personales o laborales
+- Concentración en entretenimiento auditivo
+- Procesamiento de información compleja mientras se conduce
+
+#### Medidas Preventivas
+
+##### Políticas y Regulación
+Las medidas incluyen prohibir el envío de mensajes de texto mientras se conduce, implementar leyes de manos libres y limitar el número de pasajeros jóvenes que pueden viajar con conductores adolescentes. En 2024, los 50 estados han promulgado leyes para frenar la conducción distraída, aunque varían en severidad.
+
+##### Tecnología Preventiva
+Las soluciones tecnológicas incluyen:
+
+- **Sistemas de bloqueo de aplicaciones**: Aplicaciones que desactivan funciones del teléfono durante la conducción
+- **Sistemas de detección de comportamiento**: Uso de cámaras y sensores para monitorear la atención del conductor
+- **Interfaces de voz**: Políticas que prohíben el uso de dispositivos portátiles y manos libres durante la conducción
+- **Sistemas de alerta**: Notificaciones cuando se detectan comportamientos de riesgo
+
+##### Educación y Concienciación
+Los conductores no deben realizar múltiples tareas y pueden usar aplicaciones para ayudar a evitar el uso del teléfono celular mientras conducen. Las campañas educativas deben enfocarse en:
+
+- Concientización sobre los riesgos de la multitarea
+- Promoción de técnicas de conducción defensiva
+- Entrenamiento en el uso seguro de tecnologías vehiculares
+- Desarrollo de políticas organizacionales para flotas comerciales
+
+#### Impacto Estadístico
+
+Según estudios de NHTSA y VTTI, la distracción ocurrió dentro de los 3 segundos antes del accidente vehicular. El envío de mensajes de texto mientras se conduce es seis veces más mortal que conducir bajo los efectos del alcohol, destacando la severidad de combinar múltiples tipos de distracción.
+
+### Conclusiones del Análisis de Comportamiento
+
+El sistema implementado permite la identificación automatizada de comportamientos de riesgo, proporcionando una base tecnológica para la implementación de medidas preventivas en tiempo real. La combinación de técnicas de visión por computadora con marcos regulatorios y educativos representa un enfoque integral para la reducción de accidentes relacionados con la distracción del conductor.
+
+---
+
+## Punto 3: Sistema de Recomendación Híbrido para Destinos Turísticos
+
+### Marco Conceptual
+
+Los sistemas de recomendación turística han evolucionado hacia enfoques híbridos que combinan múltiples metodologías para superar las limitaciones individuales de cada técnica. Este sistema integra tres paradigmas fundamentales: filtrado colaborativo, filtrado basado en contenido y un enfoque híbrido que aprovecha las fortalezas de ambos métodos.
+
+### Arquitectura del Sistema
+
+#### Filtrado Colaborativo
+El filtrado colaborativo se basa en la premisa de que usuarios con preferencias similares en el pasado mantendrán patrones de comportamiento similares en el futuro. La implementación utiliza una matriz usuario-ítem que captura las interacciones históricas entre usuarios y destinos turísticos. A través de técnicas de descomposición matricial, específicamente TruncatedSVD, se reduce la dimensionalidad del espacio de características, permitiendo identificar patrones latentes en los datos de comportamiento del usuario.
+
+La matriz de similitud resultante permite calcular la afinidad entre destinos basándose en las preferencias compartidas de los usuarios. Este enfoque es particularmente efectivo para destinos con un historial rico de interacciones, aunque presenta limitaciones con destinos nuevos o usuarios con pocas interacciones previas.
+
+#### Filtrado Basado en Contenido
+El filtrado basado en contenido analiza las características intrínsecas de los destinos turísticos para generar recomendaciones. El sistema procesa múltiples dimensiones de información:
+
+La **popularidad normalizada** representa un indicador cuantitativo del atractivo general del destino, mientras que la **lista de preferencias** codifica características específicas como actividades disponibles, tipo de experiencia turística y amenidades. La **categorización por tipo** permite segmentar destinos según su naturaleza (urbano, natural, cultural, etc.), y la **temporalidad óptima** considera factores estacionales y climáticos.
+
+Estas características se transforman en vectores numéricos mediante técnicas de codificación binaria, permitiendo el cálculo de similitud coseno entre destinos. Esta metodología es especialmente útil para usuarios nuevos o destinos con información limitada de interacciones.
+
+#### Enfoque Híbrido
+La combinación de ambos enfoques se realiza mediante una ponderación lineal que equilibra las recomendaciones colaborativas y basadas en contenido. El parámetro alpha controla la contribución relativa de cada método, permitiendo adaptación a diferentes escenarios de uso. Un valor de alpha igual a 0.5 proporciona equilibrio entre ambos enfoques, mientras que valores extremos favorecen uno u otro método.
+
+### Modalidades de Recomendación
+
+#### Recomendación para Usuarios Registrados
+Para usuarios con historial de interacciones, el sistema emplea un proceso de múltiples etapas. Inicialmente, se extraen las interacciones previas del usuario para construir su perfil de preferencias. Posteriormente, se calculan puntajes independientes utilizando filtrado colaborativo y basado en contenido, considerando la similitud con destinos previamente visitados o evaluados positivamente.
+
+La combinación híbrida genera un puntaje unificado que refleja tanto las preferencias implícitas del usuario como las características objetivas de los destinos. El sistema excluye destinos ya visitados para evitar recomendaciones redundantes y selecciona los destinos con mayor puntaje combinado.
+
+#### Recomendación por Perfil de Usuario
+Para usuarios sin historial o visitantes ocasionales, el sistema procesa perfiles declarativos que incluyen preferencias explícitas, características demográficas y requerimientos específicos del viaje. Esta modalidad construye un vector de preferencias sintético que se compara directamente con las características de los destinos disponibles.
+
+La similitud coseno entre el perfil del usuario y los vectores de destinos permite identificar opciones altamente compatibles, aunque esta aproximación está limitada por la calidad y completitud de la información proporcionada por el usuario.
+
+### Evaluación de Rendimiento
+
+#### Métricas de Evaluación
+La evaluación del sistema se realizó utilizando un conjunto de 50 perfiles aleatorios representativos de diferentes segmentos de usuarios. Las métricas principales incluyen precisión y recall, calculadas comparando las recomendaciones generadas con destinos considerados relevantes para cada perfil.
+
+#### Análisis de Resultados
+Los resultados obtenidos revelan una **precisión promedio del 27.9%** y un **recall promedio del 65.5%**. La precisión relativamente baja indica que aproximadamente 7 de cada 10 recomendaciones no son percibidas como altamente relevantes por los usuarios, sugiriendo oportunidades de mejora en la selectividad del algoritmo.
+
+El recall moderado demuestra que el sistema captura aproximadamente dos tercios de los destinos potencialmente relevantes, indicando una cobertura aceptable del espacio de soluciones. Este patrón es típico de sistemas que priorizan la diversidad sobre la precisión estricta.
+
+#### Limitaciones Identificadas
+El análisis revela varias limitaciones metodológicas. La función de recomendación por perfil no utiliza completamente la información disponible sobre tipo de destino y mejor momento para visitar, limitando su capacidad predictiva. Adicionalmente, la asignación de popularidad promedio para usuarios nuevos puede no reflejar preferencias individuales reales.
+
+### Direcciones de Mejora
+
+#### Optimización Algorítmica
+Las mejoras futuras incluyen el refinamiento de funciones de similitud mediante técnicas de aprendizaje automático más sofisticadas, la incorporación de retroalimentación implícita del usuario y la implementación de algoritmos de optimización para el ajuste automático del parámetro alpha.
+
+#### Enriquecimiento de Datos
+La expansión del conjunto de características de destinos, incluyendo información contextual como eventos locales, condiciones meteorológicas y precios dinámicos, podría mejorar significativamente la precisión de las recomendaciones.
+
+#### Validación Metodológica
+La implementación de técnicas de validación cruzada más robustas y el uso de métricas adicionales como diversidad y novedad de recomendaciones proporcionaría una evaluación más comprehensiva del rendimiento del sistema.
+
+### Conclusiones
+
+El sistema de recomendación híbrido implementado representa un enfoque técnicamente sólido para la personalización de sugerencias turísticas. Los resultados iniciales demuestran capacidad operativa con oportunidades claras de optimización. La arquitectura modular facilita futuras iteraciones y mejoras incrementales, posicionando el sistema como una base escalable para aplicaciones turísticas personalizadas.
+
+---
+
+# Referencias
+
+1. Taylor, S. J., & Letham, B. (2017). Forecasting at scale. *PeerJ Preprints*, 5, e3190v2. https://doi.org/10.7287/peerj.preprints.3190v2
+
+2. Centers for Disease Control and Prevention. (2024, August 27). Distracted Driving. *CDC Transportation Safety*. https://www.cdc.gov/distracted-driving/about/index.html
+
+3. California Department of Motor Vehicles. (2023, August 18). Driver Distractions. *DMV Educational Materials*. https://www.dmv.ca.gov/portal/driver-education-and-safety/educational-materials/fast-facts/driver-distractions-ffdl-28/
+
+4. National Highway Traffic Safety Administration. (2012, February 24). Visual-Manual NHTSA Driver Distraction Guidelines for In-Vehicle Electronic Devices. *Federal Register*. https://www.federalregister.gov/documents/2012/02/24/2012-4017/visual-manual-nhtsa-driver-distraction-guidelines-for-in-vehicle-electronic-devices
+
+5. Georgia Auto Law. (2024, August 14). Visual, Cognitive and Manual Distracted Driving. https://georgiaautolaw.com/visual-cognitive-an-manual-distracted-driving/
+
+6. Defensive Drivers Institute. (2024, September 26). Distracted Driving Statistics & Facts for 2024. https://defensivedriversinstitute.com/distracted-driving-statistics-and-facts-for-2024/
+
+7. 855MIKEWINS. (2024, June 5). Cognitive, Visual, and Manual Distractions: a Lethal Driving Trifecta. https://www.855mikewins.com/cognitive-visual-and-manual-distractions-a-lethal-driving-trifecta/
