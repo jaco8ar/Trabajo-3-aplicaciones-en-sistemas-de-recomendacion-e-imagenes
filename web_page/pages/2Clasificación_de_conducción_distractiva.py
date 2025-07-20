@@ -6,17 +6,36 @@ import torch.nn.functional as F
 
 from torchvision import transforms
 
-
+import os
+import requests
 
 @st.cache_resource
-def load_model(model_name):
-    model = torch.load(f'models/{model_name}.pth', map_location=torch.device('cpu'), weights_only=False)
+def load_model(model_name: str, drive_file_id: str):
+    local_path = f"models/{model_name}.pth"
+
+    # Crear carpeta si no existe
+    os.makedirs("models", exist_ok=True)
+
+    # Descargar desde Drive si el archivo no existe localmente
+    if not os.path.exists(local_path):
+        url = f"https://drive.google.com/uc?export=download&id={drive_file_id}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            with open(local_path, "wb") as f:
+                f.write(response.content)
+        else:
+            raise Exception(f"No se pudo descargar el modelo desde Drive (status: {response.status_code})")
+
+    # Cargar el modelo
+    model = torch.load(local_path, map_location=torch.device('cpu'))
     model.eval()
     return model
+
 
 class_labels = ["Otras actividades", "Conducción segura", "Hablando por teléfono", "Chateando", "Girando"]
 comportamiento_seguro = ["Conducción segura", "Girando"]
 model_name = "Modelo_Preentrenado_dataAug_v2_20250701_180011_full_model"
+file_id = "1DAoWRr23lAp6No1YWhKay-TmnDAt1mz8"
 image_size = 224
 
 
@@ -39,7 +58,7 @@ st.write("Sube una imagen y la aplicación va a utilizar un modelo entrenado par
 # File uploader for images
 uploaded_file = st.file_uploader("Escoge una imagen", type=["jpg", "jpeg", "png"])
 
-model = load_model(model_name)
+model = load_model(model_name, file_id)
 
 # If an image is uploaded, display it
 if uploaded_file is not None:
