@@ -12,10 +12,9 @@ import requests
 
 @st.cache_resource
 def load_model(model_name: str, drive_file_id: str):
-    local_path = f"models/{model_name}.pth"
-    os.makedirs("models", exist_ok=True)
+    local_path = f"resources/models/{model_name}.pth"
+    os.makedirs("resources/models", exist_ok=True)
 
-    # Re-descargar si el archivo local es sospechosamente pequeño (<1MB por ejemplo)
     if not os.path.exists(local_path) or os.path.getsize(local_path) < 1_000_000:
         
         url = f"https://drive.google.com/uc?id={drive_file_id}"
