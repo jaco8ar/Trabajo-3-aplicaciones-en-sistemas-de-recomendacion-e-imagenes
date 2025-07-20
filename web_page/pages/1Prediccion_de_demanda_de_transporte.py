@@ -8,15 +8,15 @@ st.title("Predicción de Demanda Turística")
 
 # Lista de ciudades según modelos guardados
 import os
-modelos_disponibles = [f.replace(".pkl", "") for f in os.listdir("resources/modelos_prophet")]
+modelos_disponibles = [f.replace(".pkl", "") for f in os.listdir("Recursos/modelos_prophet")]
 
 ciudad = st.selectbox("Selecciona una ciudad", modelos_disponibles)
 
 # Cargar el modelo entrenado
-modelo = joblib.load(f"resources/modelos_prophet/{ciudad}.pkl")
+modelo = joblib.load(f"Recursos/modelos_prophet/{ciudad}.pkl")
 
 # Volver a cargar los datos de esa ciudad solo para graficar la serie real
-df_demand = pd.read_csv("resources/data/df_demand.csv")
+df_demand = pd.read_csv("Recursos/data/df_demand.csv")
 df_ciudad = df_demand[df_demand['Name_x'] == ciudad].copy()
 df_ciudad = df_ciudad.rename(columns={'VisitDate': 'ds', 'num_viajes': 'y'})
 df_ciudad['ds'] = pd.to_datetime(df_ciudad['ds'])

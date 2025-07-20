@@ -11,10 +11,10 @@ st.title("🌎 Recomendador de Destinos Turísticos")
 # ------------------ Cargar datos ------------------
 @st.cache_resource
 def load_data():
-    destinos = pd.read_csv("resources/recommender_matrices/Expanded_Destinations.csv")
-    reviews = pd.read_csv("resources/recommender_matrices/Final_Updated_Expanded_Reviews.csv")
-    historial = pd.read_csv("resources/recommender_matrices/Final_Updated_Expanded_UserHistory.csv")
-    usuarios = pd.read_csv("resources/recommender_matrices/Final_Updated_Expanded_Users.csv")
+    destinos = pd.read_csv("Recursos/recommender_matrices/Expanded_Destinations.csv")
+    reviews = pd.read_csv("Recursos/recommender_matrices/Final_Updated_Expanded_Reviews.csv")
+    historial = pd.read_csv("Recursos/recommender_matrices/Final_Updated_Expanded_UserHistory.csv")
+    usuarios = pd.read_csv("Recursos/recommender_matrices/Final_Updated_Expanded_Users.csv")
 
     # Tipado
     for df in [usuarios, historial, reviews]:

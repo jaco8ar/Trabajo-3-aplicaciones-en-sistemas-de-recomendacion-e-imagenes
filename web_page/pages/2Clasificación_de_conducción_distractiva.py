@@ -12,8 +12,8 @@ import requests
 
 @st.cache_resource
 def load_model(model_name: str, drive_file_id: str):
-    local_path = f"resources/models/{model_name}.pth"
-    os.makedirs("resources/models", exist_ok=True)
+    local_path = f"Recursos/models/{model_name}.pth"
+    os.makedirs("Recursos/models", exist_ok=True)
 
     if not os.path.exists(local_path) or os.path.getsize(local_path) < 1_000_000:
         
@@ -65,7 +65,10 @@ model = load_model(model_name, file_id)
 # If an image is uploaded, display it
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_container_width=True)
+    col1, col2, col3 = st.columns([1, 2, 1])  # La imagen estará en el centro
+
+    with col2:
+        st.image(image, caption="Imagen cargada", use_container_width=True)
     
     image = image.convert("RGB").resize((image_size, image_size))
 
