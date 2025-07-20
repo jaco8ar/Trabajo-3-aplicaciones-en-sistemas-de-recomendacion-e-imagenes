@@ -3,32 +3,35 @@ import streamlit as st
 from PIL import Image
 import torch
 import torch.nn.functional as F
-
 from torchvision import transforms
+from torchvision.models import vgg
 
+import gdown
 import os
 import requests
 
 @st.cache_resource
 def load_model(model_name: str, drive_file_id: str):
     local_path = f"models/{model_name}.pth"
-
-    # Crear carpeta si no existe
     os.makedirs("models", exist_ok=True)
 
-    # Descargar desde Drive si el archivo no existe localmente
-    if not os.path.exists(local_path):
-        url = f"https://drive.google.com/uc?export=download&id={drive_file_id}"
-        response = requests.get(url)
-        if response.status_code == 200:
-            with open(local_path, "wb") as f:
-                f.write(response.content)
-        else:
-            raise Exception(f"No se pudo descargar el modelo desde Drive (status: {response.status_code})")
+    # Re-descargar si el archivo local es sospechosamente pequeño (<1MB por ejemplo)
+    if not os.path.exists(local_path) or os.path.getsize(local_path) < 1_000_000:
+        
+        url = f"https://drive.google.com/uc?id={drive_file_id}"
+        gdown.download(url, local_path, quiet=False)
 
-    # Cargar el modelo
-    model = torch.load(local_path, map_location=torch.device('cpu'))
-    model.eval()
+    # Validar que no sea HTML
+    with open(local_path, 'rb') as f:
+        start = f.read(10)
+        if b'<' in start:
+            raise ValueError("El archivo descargado parece ser HTML, no un modelo válido. Verifica el enlace de Drive.")
+
+    # Cargar modelo
+    with torch.serialization.safe_globals([vgg.VGG]):
+        model = torch.load(local_path, map_location=torch.device('cpu'), weights_only=False)
+        model.eval()
+
     return model
 
 
