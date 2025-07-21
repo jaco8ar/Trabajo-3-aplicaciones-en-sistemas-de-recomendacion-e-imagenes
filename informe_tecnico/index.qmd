@@ -334,10 +334,10 @@ Los resultados obtenidos revelan una **precisión promedio del 27.9%** y un **re
 
 El recall moderado demuestra que el sistema captura aproximadamente dos tercios de los destinos potencialmente relevantes, indicando una cobertura aceptable del espacio de soluciones. Este patrón es típico de sistemas que priorizan la diversidad sobre la precisión estricta.
 
-#### Limitaciones Identificadas
-El análisis revela varias limitaciones metodológicas. La función de recomendación por perfil no utiliza completamente la información disponible sobre tipo de destino y mejor momento para visitar, limitando su capacidad predictiva. Adicionalmente, la asignación de popularidad promedio para usuarios nuevos puede no reflejar preferencias individuales reales.
 
 ### Direcciones de Mejora
+
+### Agregar más información del dataset para realizar la predicción.
 
 #### Optimización Algorítmica
 Las mejoras futuras incluyen el refinamiento de funciones de similitud mediante técnicas de aprendizaje automático más sofisticadas, la incorporación de retroalimentación implícita del usuario y la implementación de algoritmos de optimización para el ajuste automático del parámetro alpha.
