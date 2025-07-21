@@ -421,4 +421,40 @@ La evaluación del sistema se realizó utilizando un conjunto de 50 perfiles ale
 #### Análisis de Resultados
 Los resultados obtenidos revelan una **precisión promedio del 27.9%** y un **recall promedio del 65.5%**. La precisión relativamente baja indica que aproximadamente 7 de cada 10 recomendaciones no son percibidas como altamente relevantes por los usuarios, sugiriendo oportunidades de mejora en la selectividad del algoritmo.
 
-El recall moderado demuestra que el sistema captura aproximadamente dos ter
+El recall moderado demuestra que el sistema captura aproximadamente dos tercios de los destinos potencialmente relevantes, indicando una cobertura aceptable del espacio de soluciones. Este patrón es típico de sistemas que priorizan la diversidad sobre la precisión estricta.
+
+
+### Direcciones de Mejora
+
+### Agregar más información del dataset para realizar la predicción.
+
+#### Optimización Algorítmica
+Las mejoras futuras incluyen el refinamiento de funciones de similitud mediante técnicas de aprendizaje automático más sofisticadas, la incorporación de retroalimentación implícita del usuario y la implementación de algoritmos de optimización para el ajuste automático del parámetro alpha.
+
+#### Enriquecimiento de Datos
+La expansión del conjunto de características de destinos, incluyendo información contextual como eventos locales, condiciones meteorológicas y precios dinámicos, podría mejorar significativamente la precisión de las recomendaciones.
+
+#### Validación Metodológica
+La implementación de técnicas de validación cruzada más robustas y el uso de métricas adicionales como diversidad y novedad de recomendaciones proporcionaría una evaluación más comprehensiva del rendimiento del sistema.
+
+### Conclusiones
+
+El sistema de recomendación híbrido implementado representa un enfoque técnicamente sólido para la personalización de sugerencias turísticas. Los resultados iniciales demuestran capacidad operativa con oportunidades claras de optimización. La arquitectura modular facilita futuras iteraciones y mejoras incrementales, posicionando el sistema como una base escalable para aplicaciones turísticas personalizadas.
+
+---
+
+# Referencias
+
+1. Taylor, S. J., & Letham, B. (2017). Forecasting at scale. *PeerJ Preprints*, 5, e3190v2. https://doi.org/10.7287/peerj.preprints.3190v2
+
+2. Centers for Disease Control and Prevention. (2024, August 27). Distracted Driving. *CDC Transportation Safety*. https://www.cdc.gov/distracted-driving/about/index.html
+
+3. California Department of Motor Vehicles. (2023, August 18). Driver Distractions. *DMV Educational Materials*. https://www.dmv.ca.gov/portal/driver-education-and-safety/educational-materials/fast-facts/driver-distractions-ffdl-28/
+
+4. National Highway Traffic Safety Administration. (2012, February 24). Visual-Manual NHTSA Driver Distraction Guidelines for In-Vehicle Electronic Devices. *Federal Register*. https://www.federalregister.gov/documents/2012/02/24/2012-4017/visual-manual-nhtsa-driver-distraction-guidelines-for-in-vehicle-electronic-devices
+
+5. Georgia Auto Law. (2024, August 14). Visual, Cognitive and Manual Distracted Driving. https://georgiaautolaw.com/visual-cognitive-an-manual-distracted-driving/
+
+6. Defensive Drivers Institute. (2024, September 26). Distracted Driving Statistics & Facts for 2024. https://defensivedriversinstitute.com/distracted-driving-statistics-and-facts-for-2024/
+
+7. 855MIKEWINS. (2024, June 5). Cognitive, Visual, and Manual Distractions: a Lethal Driving Trifecta. https://www.855mikewins.com/cognitive-visual-and-manual-distractions-a-lethal-driving-trifecta/
