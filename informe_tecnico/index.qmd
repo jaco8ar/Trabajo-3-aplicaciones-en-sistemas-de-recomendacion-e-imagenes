@@ -3,7 +3,7 @@ format:
   html:
     toc: true
     toc-depth: 2
-    number-sections: true
+    number-sections: false
 execute:
   echo: false
    
@@ -54,7 +54,7 @@ execute:
 ```
 # Índices
 
-## Índice de Contenidos
+### Contenidos
 
 1. [Introducción](#introducción)  
 2. [Objetivos](#objetivos)  
@@ -67,20 +67,31 @@ execute:
 4. [Referencias](#referencias)
 
 
-## Índice de Tablas
+### Tablas
 
-- **Tabla 1.** Métricas de rendimiento por destino – Sección Evaluación del Modelo
+- **Tabla 1.** [Métricas de rendimiento por destino](#evaluación-del-modelo)
+- **Tabla 2.** [Reporte de clasificación](#evaluación)
 
-## Índice de Figuras
+### Gráficas
 
-- **Figura 1.** Ejemplo de predicción de demanda turística – Sección Punto 1  
-- **Figura 2.** Matriz de confusión del modelo de clasificación – Sección Punto 2  
-- **Figura 3.** Interfaz del sistema de recomendación – Sección Punto 3  
+- **Gráfica 1.** [Destinos populares](#preparación-inicial-de-los-datos)  
+- **Gráfica 2.** [Número de viajes por destino ](#análisis-de-usuarios-y-patrones-de-viaje)  
+- **Gráfica 3.** [Predicción de demanda para Kerala Backwaters ](#análisis-de-predicción-individual)  
+- **Gráfica 4.** [Proyección de demanda para los próximos 30 días](#análisis-conjunto-de-todos-los-destinos)  
+- **Gráfica 5.** [Predicción vs Real para cada destino](#evaluación-del-modelo)  
+- **Gráfica 6.** [Componentes del modelo Prophet para Goa Beaches](#análisis-de-componentes)  
+- **Gráfica 7.** [Componentes del modelo Prophet para Jaipur City](#análisis-de-componentes)  
+- **Gráfica 8.** [Componentes del modelo Prophet para Kerala Backwaters](#análisis-de-componentes)  
+- **Gráfica 9.** [Componentes del modelo Prophet para Leh Ladakh](#análisis-de-componentes)  
+- **Gráfica 10.** [Componentes del modelo Prophet para Taj Mahal](#análisis-de-componentes)  
+- **Gráfica 11.** [Pérdida y exactitud del modelo sin preentrenamiento](#entrenamiento-y-evaluación-del-modelo)  
+- **Gráfica 12.** [Pérdida y exactitud del modelo con preentrenamiento](#entrenamiento-y-evaluación-del-modelo)  
+- **Gráfica 13.** [Matriz de confusión del modelo de clasificación](#evaluación)  
 
 
 # Introducción
 
-En el contexto actual, las empresas de transporte enfrentan desafíos crecientes relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. Factores como la variabilidad en la demanda, los riesgos asociados a la conducción distractiva y la necesidad de ofrecer experiencias personalizadas exigen soluciones tecnológicas avanzadas. Este proyecto propone el desarrollo de un sistema inteligente integrado basado en técnicas de aprendizaje profundo, con el objetivo de abordar tres problemáticas clave: la predicción de la demanda de transporte mediante series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos de viaje para los usuarios. 
+En el contexto actual, las empresas de transporte enfrentan desafíos crecientes relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. Factores como la variabilidad en la demanda, los riesgos asociados a la conducción distraída y la necesidad de ofrecer experiencias personalizadas exigen soluciones tecnológicas avanzadas. Este proyecto propone el desarrollo de un sistema inteligente integrado basado en técnicas de aprendizaje profundo, con el objetivo de abordar tres problemáticas clave: la predicción de la demanda de transporte mediante series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos de viaje para los usuarios. 
 
 # Objetivos
 
@@ -88,13 +99,13 @@ En el contexto actual, las empresas de transporte enfrentan desafíos crecientes
 
 Desarrollar un sistema inteligente integrado basado en aprendizaje profundo que permita predecir la demanda de transporte, clasificar comportamientos distractores en conductores a partir de imágenes y generar recomendaciones personalizadas de destinos de viaje, con el fin de optimizar la eficiencia operativa, mejorar la seguridad vial y elevar la experiencia del usuario en una empresa de transporte.
 
-## Objetivos especificos
+## Objetivos específicos
 
 1. **Desarrollar un modelo de series de tiempo** que utilice datos históricos para predecir la demanda de transporte en rutas específicas durante los próximos 30 días, facilitando una mejor planificación de recursos.
-2. **Entrenar un modelo de clasificación de imágenes** para identificar comportamientos distractores en los conductores, como el uso del teléfono móvil o la somnolencia, con el fin de reducir riesgos de accidentes.
+2. **Entrenar un modelo de clasificación de imágenes** para identificar comportamientos distractores en los conductores, como el uso del teléfono móvil, con el fin de reducir riesgos de accidentes.
 3. **Implementar un sistema de recomendación personalizado** que sugiera destinos de viaje a los usuarios, utilizando información del historial de viajes y preferencias individuales.
 4. **Diseñar una herramienta web interactiva** que integre los tres módulos desarrollados, permitiendo la visualización de predicciones, la clasificación de imágenes y la generación de recomendaciones de manera accesible para los usuarios y administradores de la empresa.
-5. **Documentar el proceso completo de desarrollo** en un informe técnico.
+5. **Documentar el proceso completo de desarrollo**.
 
 # Desarrollo del proyecto
 
@@ -109,7 +120,7 @@ Se consolidaron todos los datasets disponibles en uno solo para simplificar el a
 Como paso inicial del análisis exploratorio, se generó una visualización de los destinos más populares, lo que reveló que la base de datos contiene únicamente 5 destinos posibles.
 
 ```{=html}
- <img src="imagenes/DestinosPopulares.png" alt="Gráfica 1: Destinos populares" />
+ <img src="imagenes/DestinosPopulares.png" alt="Distribución de popularidad de destinos turísticos" />
 ```
 
 #### Análisis de Usuarios y Patrones de Viaje
@@ -124,7 +135,7 @@ Para optimizar el procesamiento y análisis posterior, se realizaron las siguien
 La distribución de viajes por destino se visualiza en la siguiente gráfica:
 
 ```{=html}
- <img src="imagenes/NúmeroViajesDestino.png" alt="Gráfica 2: Número de viajes por destino" />
+ <img src="imagenes/NúmeroViajesDestino.png" alt="Distribución de viajes por destino turístico" />
 ```
 
 Los resultados muestran una distribución equilibrada entre destinos, sin diferencias significativas en el número de viajes registrados para cada uno.
@@ -150,7 +161,7 @@ Se optó por el modelo Prophet debido a sus características particulares que se
 Se realizó una predicción inicial para el destino Kerala Backwaters como caso de estudio:
 
 ```{=html}
- <img src="imagenes/PredicciónProphetKeralaBackWaters.png" alt="Gráfica 3: Predicción de demanda para Kerala Backwaters" />
+ <img src="imagenes/PredicciónProphetKeralaBackWaters.png" alt="Predicción temporal de demanda para Kerala Backwaters usando Prophet" />
 ```
 
 La predicción indica un crecimiento constante en la demanda de viajes hacia Kerala, con variaciones estacionales características del comportamiento turístico.
@@ -160,7 +171,7 @@ La predicción indica un crecimiento constante en la demanda de viajes hacia Ker
 Se generaron predicciones para los 5 destinos y se consolidaron en un dataset unificado. La proyección para los próximos 30 días se presenta a continuación:
 
 ```{=html}
- <img src="imagenes/ProyecciónDemanda30Dias.png" alt="Gráfica 4: Proyección de demanda para los próximos 30 días" />
+ <img src="imagenes/ProyecciónDemanda30Dias.png" alt="Proyección consolidada de demanda turística para todos los destinos" />
 ```
 
 #### Interpretación de Resultados
@@ -186,7 +197,7 @@ Se evaluó el desempeño del modelo utilizando las métricas RMSE (Root Mean Squ
 | Jaipur City | 0.00 | 0.00 |
 
 ```{=html}
- <img src="imagenes/MetricasPorDestino.png" alt="Gráfica 5: Predicción vs Real para cada destino" />
+ <img src="imagenes/MetricasPorDestino.png" alt="Comparación entre predicciones y valores reales por destino" />
 ```
 
 #### Análisis de Resultados
@@ -204,11 +215,11 @@ Esta variabilidad sugiere que algunos destinos requieren datasets más extensos 
 Se almacenaron las predicciones individuales por ciudad y se analizaron los componentes de cada modelo:
 
 ```{=html}
- <img src="imagenes/ComponentesGoaBeaches.png" alt="Gráfica 6: Componentes destino Goa Beaches" />
- <img src="imagenes/ComponentesJaipurCity.png" alt="Gráfica 7: Componentes destino Jaipur City" />
- <img src="imagenes/ComponentesKeralaBackwaters.png" alt="Gráfica 8: Componentes destino Kerala Backwaters" />
- <img src="imagenes/ComponentesLehLadakh.png" alt="Gráfica 9: Componentes destino Leh Ladakh" />
- <img src="imagenes/ComponentesTajMahal.png" alt="Gráfica 10: Componentes destino Taj Mahal" />
+ <img src="imagenes/ComponentesGoaBeaches.png" alt="Descomposición de componentes temporales para Goa Beaches" />
+ <img src="imagenes/ComponentesJaipurCity.png" alt="Descomposición de componentes temporales para Jaipur City" />
+ <img src="imagenes/ComponentesKeralaBackwaters.png" alt="Descomposición de componentes temporales para Kerala Backwaters" />
+ <img src="imagenes/ComponentesLehLadakh.png" alt="Descomposición de componentes temporales para Leh Ladakh" />
+ <img src="imagenes/ComponentesTajMahal.png" alt="Descomposición de componentes temporales para Taj Mahal" />
 ```
 
 ### Conclusiones
@@ -219,14 +230,91 @@ La arquitectura del modelo proporciona una base sólida para futuras expansiones
 
 ## Punto 2: Clasificación de Comportamientos del Conductor
 
-### Metodología Implementada
+### Descripción del problema
+
+Las distracciones al conducir son una de las principales causas de accidentes de tránsito a nivel mundial. Estas ocurren cuando el conductor desvía su atención de la tarea principal de manejar, ya sea por factores visuales, manuales o cognitivos, como el uso del celular, comer, hablar con pasajeros o manipular dispositivos dentro del vehículo. Este tipo de comportamientos compromete significativamente la capacidad de reacción y el control sobre el vehículo, aumentando el riesgo de colisiones, lesiones graves e incluso muertes. Por ello, detectar y reducir las distracciones es una prioridad en la mejora de la seguridad vial.
+
+### Dataset de trabajo
+
+Para la construcción del modelo se utilizó el dataset [Multi-Class Driver Behavior Image Dataset](https://www.kaggle.com/datasets/arafatsahinafridi/multi-class-driver-behavior-image-dataset/data?authuser=0). Este cuenta con 7276 imágenes de conductores retratando diferentes comportamientos al conducir sus vehículos. Se dividen en 5 clases que pueden ser consideradas como comportamientos seguros o no seguros, estas son:
+
+**Comportamientos seguros**: adecuados y normales en la práctica de la conducción.
+
+- Conducción segura (Safe Driving)
+- Girando (Turning)
+  
+**Comportamientos no seguros**: implican una reducción total o parcial de la atención de la tarea principal de conducción, se desean reducir por lo que el modelo debe tener prioridad en su clasificación por encima de los comportamientos categorizados como no seguros.
+
+- Hablando por teléfono (Talking phone)
+- Escribiendo en teléfono (Texting phone)
+- Otras actividades (Other activities)
+
+Las imágenes contenidas en el dataset parecen tener en común que todas fueron tomadas desde la misma ubicación de los vehículos. 
+
+### Proceso de implementación
 
 Se desarrolló un sistema de clasificación multiclase para el análisis de comportamientos del conductor utilizando técnicas de aprendizaje profundo. La implementación incluyó:
 
-- **Configuración del entorno**: Configuración de PyTorch con soporte CUDA para procesamiento en GPU
-- **Preprocesamiento de datos**: Implementación de una clase `DriverBehaviorDataset` para la gestión de imágenes y etiquetas
-- **Entrenamiento del modelo**: Utilización de arquitecturas de CNN preentrenadas para clasificación de comportamientos
-- **Evaluación y visualización**: Implementación de métricas de rendimiento y visualización de predicciones
+- **Configuración del entorno**: Identificación e importación de librerías, configuración de PyTorch para uso de GPU y carga de datos desde Kaggle.
+
+- **Preparación del modelo**: 
+  
+  - Para el conjunto de datos de entrenamiento se realizó un proceso de aumento de imágenes para construir un modelo más robusto y versátil. Se utilizaron operaciones de rotación, alteración de color y espejo. 
+  - Se utilizó una proporción de entrenamiento/test/validación de 80/10/10.
+  - Se optó por construir dos tipos de modelo distinto con el objetivo de comparar resultados. Con base en la arquitectura vgg19 se definió un modelo preentrenado y otro con pesos aleatorios.
+
+- **Entrenamiento y evaluación del modelo**: ambos modelos se entrenaron con el mismo conjunto de datos:
+  - *Modelo sin preentrenamiento*: 
+  A pesar de contar con una arquitectura robusta, este modelo presentó un subajuste significativo que no pudo ser corregido durante el entrenamiento. Dado su bajo desempeño y la falta de mejora a lo largo de las épocas, se descartó como opción viable para el modelo final.
+
+  Gráficas de desempeño en validación del modelo:
+```{=html}
+<img src="imagenes/perdida_y_exactitud_sin_pre.png" alt="Curvas de pérdida y exactitud durante entrenamiento del modelo sin preentrenamiento" />
+```
+
+  - *Modelo preentrenado*: 
+  Este modelo mostró un desempeño sobresaliente sin evidencias de sobreajuste. Tras varias iteraciones, se seleccionó la versión que logró el mayor número de predicciones positivas para la categoría "other_activities". Esta decisión se fundamenta en que dicha categoría representa comportamientos peligrosos por parte del conductor, los cuales se buscan minimizar. Por lo tanto, se priorizó una configuración que redujera los errores en su identificación.
+
+  Gráficas de desempeño en validación del modelo:
+
+```{=html}
+<img src="imagenes/perdida_y_exactitud_con_pre.png" alt="Curvas de pérdida y exactitud durante entrenamiento del modelo con preentrenamiento" />
+```
+
+### Evaluación 
+
+Para evaluar el modelo seleccionado para uso en la herramienta web se construyó una matriz de confusión y se evaluaron las métricas pertinentes con base en esta.
+
+Matriz de confusión:
+
+<img src="imagenes/matriz_confusion.png" alt="Matriz de confusión para clasificación de comportamientos del conductor" />
+
+Métricas:
+
+| Clase             | Precisión | Recall | F1-Score | Soporte |
+|------------------|-----------|--------|----------|---------|
+| other_activities | 0.82      | 0.93   | 0.87     | 119     |
+| safe_driving     | 0.95      | 0.93   | 0.94     | 146     |
+| talking_phone    | 0.99      | 0.98   | 0.99     | 157     |
+| texting_phone    | 0.99      | 0.97   | 0.98     | 174     |
+| turning          | 0.98      | 0.92   | 0.95     | 132     |
+| **Accuracy**     |           |        | **0.95** | **728** |
+| **Macro avg**    | 0.95      | 0.95   | 0.95     | 728     |
+| **Weighted avg** | 0.95      | 0.95   | 0.95     | 728     |
+
+
+#### Resultados
+
+El modelo alcanza una exactitud general del 95%, lo que indica un desempeño sólido en la clasificación de las actividades del conductor. Las métricas por clase muestran un buen equilibrio entre precisión, recall y f1-score en todas las categorías, destacando especialmente el alto rendimiento en clases como talking_phone y texting_phone, con valores cercanos al 99%. La clase other_activities, aunque tiene una precisión más baja (0.82), alcanza un recall alto (0.93), lo cual es positivo, ya que permite identificar la mayoría de los comportamientos peligrosos que se desean minimizar. En conjunto, los resultados sugieren que el modelo es confiable para detectar tanto comportamientos seguros como inseguros al volante.
+
+#### Consideraciones adicionales
+
+A pesar del buen desempeño del modelo en términos de métricas como precisión, recall y F1-score, es importante tener en cuenta algunas limitaciones inherentes al conjunto de datos utilizado. Aunque el dataset es amplio y de buena calidad, todas las imágenes fueron capturadas desde una única perspectiva: una vista lateral y elevada que permite observar al conductor desde la cintura hacia arriba. Esta posición no representa el ángulo habitual desde el que se toman imágenes en contextos reales. Una búsqueda rápida en internet evidencia que esta perspectiva estandarizada no es la más común en escenarios de conducción reales, lo que puede limitar la capacidad de generalización del modelo ante imágenes tomadas desde otros ángulos.
+
+Para mitigar esta limitación, una posible solución sería que la empresa de transporte indique explícitamente la ubicación en la que deben instalarse las cámaras en los vehículos, de modo que coincida con la perspectiva del dataset y se mantenga la efectividad del modelo en producción.
+
+Adicionalmente, la clase "other_activities" presenta ambigüedades importantes. Su definición es demasiado general y, en la práctica, resulta difícil interpretar qué actividad realiza exactamente el conductor en muchas de las imágenes etiquetadas con esta clase. Esta falta de claridad no solo podría haber contribuido a un desempeño relativamente inferior del modelo en dicha categoría, sino que también explica por qué el modelo tiende a clasificar imágenes externas al conjunto de entrenamiento como "other_activities" con mayor frecuencia.
+
 
 ### Tipos de Distracción del Conductor: Análisis y Prevención
 
@@ -240,10 +328,11 @@ Las distracciones visuales ocurren cuando un conductor aparta la vista de la car
 - Uso de dispositivos electrónicos
 - Observación de eventos externos (accidentes, construcciones)
 - Lectura de mensajes de texto o navegación GPS
-- Atención a pasajeros o objetos en el vehículo
+- Atención a pasajeros u objetos en el vehículo
 
 ##### 2. Distracción Manual
 Las distracciones manuales involucran cualquier acción que mueva las manos del conductor lejos del volante. Los comportamientos más frecuentes son:
+
 
 - Manipulación de teléfonos celulares
 - Ajuste de controles del vehículo (radio, climatización)
@@ -332,40 +421,4 @@ La evaluación del sistema se realizó utilizando un conjunto de 50 perfiles ale
 #### Análisis de Resultados
 Los resultados obtenidos revelan una **precisión promedio del 27.9%** y un **recall promedio del 65.5%**. La precisión relativamente baja indica que aproximadamente 7 de cada 10 recomendaciones no son percibidas como altamente relevantes por los usuarios, sugiriendo oportunidades de mejora en la selectividad del algoritmo.
 
-El recall moderado demuestra que el sistema captura aproximadamente dos tercios de los destinos potencialmente relevantes, indicando una cobertura aceptable del espacio de soluciones. Este patrón es típico de sistemas que priorizan la diversidad sobre la precisión estricta.
-
-#### Limitaciones Identificadas
-El análisis revela varias limitaciones metodológicas. La función de recomendación por perfil no utiliza completamente la información disponible sobre tipo de destino y mejor momento para visitar, limitando su capacidad predictiva. Adicionalmente, la asignación de popularidad promedio para usuarios nuevos puede no reflejar preferencias individuales reales.
-
-### Direcciones de Mejora
-
-#### Optimización Algorítmica
-Las mejoras futuras incluyen el refinamiento de funciones de similitud mediante técnicas de aprendizaje automático más sofisticadas, la incorporación de retroalimentación implícita del usuario y la implementación de algoritmos de optimización para el ajuste automático del parámetro alpha.
-
-#### Enriquecimiento de Datos
-La expansión del conjunto de características de destinos, incluyendo información contextual como eventos locales, condiciones meteorológicas y precios dinámicos, podría mejorar significativamente la precisión de las recomendaciones.
-
-#### Validación Metodológica
-La implementación de técnicas de validación cruzada más robustas y el uso de métricas adicionales como diversidad y novedad de recomendaciones proporcionaría una evaluación más comprehensiva del rendimiento del sistema.
-
-### Conclusiones
-
-El sistema de recomendación híbrido implementado representa un enfoque técnicamente sólido para la personalización de sugerencias turísticas. Los resultados iniciales demuestran capacidad operativa con oportunidades claras de optimización. La arquitectura modular facilita futuras iteraciones y mejoras incrementales, posicionando el sistema como una base escalable para aplicaciones turísticas personalizadas.
-
----
-
-# Referencias
-
-1. Taylor, S. J., & Letham, B. (2017). Forecasting at scale. *PeerJ Preprints*, 5, e3190v2. https://doi.org/10.7287/peerj.preprints.3190v2
-
-2. Centers for Disease Control and Prevention. (2024, August 27). Distracted Driving. *CDC Transportation Safety*. https://www.cdc.gov/distracted-driving/about/index.html
-
-3. California Department of Motor Vehicles. (2023, August 18). Driver Distractions. *DMV Educational Materials*. https://www.dmv.ca.gov/portal/driver-education-and-safety/educational-materials/fast-facts/driver-distractions-ffdl-28/
-
-4. National Highway Traffic Safety Administration. (2012, February 24). Visual-Manual NHTSA Driver Distraction Guidelines for In-Vehicle Electronic Devices. *Federal Register*. https://www.federalregister.gov/documents/2012/02/24/2012-4017/visual-manual-nhtsa-driver-distraction-guidelines-for-in-vehicle-electronic-devices
-
-5. Georgia Auto Law. (2024, August 14). Visual, Cognitive and Manual Distracted Driving. https://georgiaautolaw.com/visual-cognitive-an-manual-distracted-driving/
-
-6. Defensive Drivers Institute. (2024, September 26). Distracted Driving Statistics & Facts for 2024. https://defensivedriversinstitute.com/distracted-driving-statistics-and-facts-for-2024/
-
-7. 855MIKEWINS. (2024, June 5). Cognitive, Visual, and Manual Distractions: a Lethal Driving Trifecta. https://www.855mikewins.com/cognitive-visual-and-manual-distractions-a-lethal-driving-trifecta/
+El recall moderado demuestra que el sistema captura aproximadamente dos ter

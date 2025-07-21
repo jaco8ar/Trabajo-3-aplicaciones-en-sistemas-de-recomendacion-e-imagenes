@@ -24,10 +24,10 @@ Se construyó una herramienta web interactiva para probar cada modelo y visualiz
 
 ```plaintext
 Trabajo-3-aplicaciones-en-sistemas-de-recomendacion-e-imagenes/
-├── Informe_tecnico/    -         
-├── Notebooks/          -
-├── Recursos/           -
-├── web_page/           -
+├── Informe_tecnico/             
+├── Notebooks/          
+├── Recursos/           
+├── web_page/           
 │   ├── Home.py
 │   └── pages/
 │       ├── 1Prediccion_de_demanda.py
