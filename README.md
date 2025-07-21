@@ -12,8 +12,7 @@ Se construyó una herramienta web interactiva para probar cada modelo y visualiz
 
 ## Enlaces útiles
 
-- [Video demostrativo](https://drive.google.com/file/d/1bsGW4kEb97XDH3IvKGYpgdKuUPilWsaL/view?usp=drive_link
-)  
+- [Video demostrativo](https://drive.google.com/file/d/1dpMOmKTHa6ZGVO8jo9ThdAbGEzZ-VjEl/view?usp=drive_link)  
 - [Informe técnico en QuartoPub](https://jochoara.quarto.pub/trabajo-3/)  
 - [Sitio web (Streamlit)](https://trabajo-3-aplicaciones-en-sistemas-de-recomendacion-e-imagenes.streamlit.app/)
 
@@ -34,7 +33,7 @@ Trabajo-3-aplicaciones-en-sistemas-de-recomendacion-e-imagenes/
 │       ├── 2Clasificación_de_conducción.py
 │       ├── 3Recomendación_de_destinos.py
 │       └── Sobre_Nosotros.py
-
+```
 
 ##  Requisitos
 
