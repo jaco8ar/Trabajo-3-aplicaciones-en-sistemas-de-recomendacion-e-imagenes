@@ -108,10 +108,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#índices" id="toc-índices" class="nav-link active" data-scroll-target="#índices">Índices</a></li>
-  <li><a href="#introducción" id="toc-introducción" class="nav-link" data-scroll-target="#introducción">Introducción</a></li>
-  <li><a href="#objetivos" id="toc-objetivos" class="nav-link" data-scroll-target="#objetivos">Objetivos</a>
+  <li><a href="#resumen-ejecutivo" id="toc-resumen-ejecutivo" class="nav-link active" data-scroll-target="#resumen-ejecutivo">Resumen ejecutivo</a></li>
+  <li><a href="#índices" id="toc-índices" class="nav-link" data-scroll-target="#índices">Índices</a></li>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link" data-scroll-target="#introducción">Introducción</a>
   <ul class="collapse">
+  <li><a href="#objetivos" id="toc-objetivos" class="nav-link" data-scroll-target="#objetivos">Objetivos</a></li>
   <li><a href="#objetivo-general" id="toc-objetivo-general" class="nav-link" data-scroll-target="#objetivo-general">Objetivo General</a></li>
   <li><a href="#objetivos-específicos" id="toc-objetivos-específicos" class="nav-link" data-scroll-target="#objetivos-específicos">Objetivos específicos</a></li>
   </ul></li>
@@ -121,12 +122,17 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#punto-2-clasificación-de-comportamientos-del-conductor" id="toc-punto-2-clasificación-de-comportamientos-del-conductor" class="nav-link" data-scroll-target="#punto-2-clasificación-de-comportamientos-del-conductor">Punto 2: Clasificación de Comportamientos del Conductor</a></li>
   <li><a href="#punto-3-sistema-de-recomendación-híbrido-para-destinos-turísticos" id="toc-punto-3-sistema-de-recomendación-híbrido-para-destinos-turísticos" class="nav-link" data-scroll-target="#punto-3-sistema-de-recomendación-híbrido-para-destinos-turísticos">Punto 3: Sistema de Recomendación Híbrido para Destinos Turísticos</a></li>
   </ul></li>
+  <li><a href="#herramienta-web" id="toc-herramienta-web" class="nav-link" data-scroll-target="#herramienta-web">Herramienta web</a></li>
+  <li><a href="#conclusiones-2" id="toc-conclusiones-2" class="nav-link" data-scroll-target="#conclusiones-2">Conclusiones</a>
+  <ul class="collapse">
+  <li><a href="#recomendaciones-y-propuestas-futuras" id="toc-recomendaciones-y-propuestas-futuras" class="nav-link" data-scroll-target="#recomendaciones-y-propuestas-futuras">Recomendaciones y Propuestas Futuras</a></li>
+  </ul></li>
   <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><h1 style="color:rgb(26, 54, 97); font-size: 50px;" class="title display-7">Trabajo 3: aplicaciones en sistemas de recomendación e imágenes</h1></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><h1 style="text-align:center ;color:rgb(26, 54, 97); font-size: 50px;" class="title display-7">Trabajo 3: aplicaciones en sistemas de recomendación e imágenes</h1></header>
 
 
 
@@ -170,6 +176,44 @@ ul.task-list li input[type="checkbox"] {
     <img src="imagenes/logo_UNAL.png" alt="logo UNAL">
 </div>
 
+<hr>
+<section id="resumen-ejecutivo" class="level2">
+<h2 class="anchored" data-anchor-id="resumen-ejecutivo">Resumen ejecutivo</h2>
+<p>En el contexto actual, las empresas de transporte enfrentan desafíos crecientes relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. Factores como la variabilidad en la demanda, los riesgos asociados a la conducción distraída y la necesidad de ofrecer experiencias personalizadas exigen soluciones tecnológicas avanzadas. Este proyecto propone el desarrollo de un sistema inteligente integrado basado en técnicas de aprendizaje profundo, con el objetivo de abordar tres problemáticas clave: la predicción de la demanda de transporte mediante series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos de viaje para los usuarios.</p>
+<p>La solución desarrollada es una aplicación web interactiva que integra tres módulos basados en modelos de aprendizaje profundo. Cada módulo responde directamente a una necesidad operativa de la empresa:</p>
+<ul>
+<li><p><strong>Predicción de demanda</strong>: utiliza un modelo de series de tiempo para anticipar la afluencia turística en distintos destinos, facilitando la planificación de recursos logísticos y humanos.</p></li>
+<li><p><strong>Clasificación de conducción distractiva</strong>: emplea modelos de visión por computadora para detectar automáticamente comportamientos riesgosos al volante a partir de imágenes, mejorando la seguridad operativa.</p></li>
+<li><p><strong>Recomendación personalizada de destinos</strong>: mediante sistemas híbridos de recomendación, sugiere destinos turísticos a los usuarios según su historial y preferencias, mejorando la experiencia del cliente.</p></li>
+</ul>
+<p><em>Tecnologías utilizadas</em>:</p>
+<ul>
+<li>Construcción de pagina web: <code>Streamlit</code></li>
+<li>Modelo de series de tiempo: <code>Prophet</code></li>
+<li>Clasificador de comportamientos peligrosos: Modelo de <code>Torch</code> basado en arquitectura vgg19</li>
+<li>Sistema recomendador: <code>Sklearn</code></li>
+</ul>
+<p><em>Resultados</em>:</p>
+<ul>
+<li>Modelo de series de tiempo:
+<ul>
+<li>Leh Ladakh y Jaipur City : <strong>Excelente ajuste</strong></li>
+<li>Taj Mahal y Goa Beaches : <strong>Ajuste moderado</strong></li>
+<li>Kerala Backwaters : <strong>Ajuste deficiente</strong></li>
+</ul></li>
+<li>Clasificador de comportamientos peligrosos:
+<ul>
+<li>Exactitud promedio : <strong>95%</strong></li>
+</ul></li>
+<li>Sistema recomendador:
+<ul>
+<li>Precisión promedio : <strong>27.9%</strong></li>
+<li>Recall promedio : <strong>65.5%</strong></li>
+</ul></li>
+</ul>
+<p>Este estudio demuestra cómo la integración de modelos inteligentes permite tomar decisiones estratégicas basadas en datos reales, optimizando la operación, seguridad y experiencia del usuario en el sector transporte. La información obtenida puede aprovecharse comercialmente para personalizar servicios, detectar riesgos en la conducción, identificar oportunidades de mercado y diseñar campañas más efectivas, posicionando a las empresas con una ventaja competitiva clara.</p>
+<hr>
+</section>
 <section id="índices" class="level1">
 <h1>Índices</h1>
 <section id="contenidos" class="level3">
@@ -236,10 +280,13 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="introducción" class="level1">
 <h1>Introducción</h1>
-<p>En el contexto actual, las empresas de transporte enfrentan desafíos crecientes relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. Factores como la variabilidad en la demanda, los riesgos asociados a la conducción distraída y la necesidad de ofrecer experiencias personalizadas exigen soluciones tecnológicas avanzadas. Este proyecto propone el desarrollo de un sistema inteligente integrado basado en técnicas de aprendizaje profundo, con el objetivo de abordar tres problemáticas clave: la predicción de la demanda de transporte mediante series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos de viaje para los usuarios.</p>
+<p>En el panorama actual, las empresas de transporte enfrentan desafíos cada vez más complejos relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. La creciente variabilidad en la demanda de servicios, los riesgos asociados a la conducción distraída y la necesidad de ofrecer experiencias más personalizadas exigen soluciones tecnológicas avanzadas que permitan responder de forma ágil y efectiva a estas necesidades.</p>
+<p>Este trabajo propone el desarrollo de un sistema inteligente integrado, basado en técnicas de aprendizaje profundo, que aborda de manera simultánea tres problemáticas clave: la predicción de la demanda de transporte mediante modelos de series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos turísticos según las preferencias del usuario.</p>
+<p>Durante el desarrollo del proyecto se logró articular y contextualizar estos tres ejes temáticos, inicialmente disímiles, de forma complementaria. El análisis conjunto de los datos permite generar información estratégica de alto valor tanto para empresas como para conductores. Disponer de un conocimiento detallado sobre las preferencias de viaje, destinos más frecuentados y su evolución a lo largo del tiempo, brinda herramientas clave para el diseño de rutas, la optimización de horarios y la planificación operativa.</p>
+<p>Asimismo, el sistema facilita identificar patrones de comportamiento, tendencias emergentes o en decadencia, y conductas de riesgo en la conducción, elementos que pueden aprovecharse no solo para mejorar la oferta de servicios y la experiencia del usuario, sino también para implementar estrategias comerciales más efectivas y programas de capacitación para conductores enfocados en la seguridad y el valor cultural o histórico de los destinos.</p>
+<section id="objetivos" class="level2">
+<h2 class="anchored" data-anchor-id="objetivos">Objetivos</h2>
 </section>
-<section id="objetivos" class="level1">
-<h1>Objetivos</h1>
 <section id="objetivo-general" class="level2">
 <h2 class="anchored" data-anchor-id="objetivo-general">Objetivo General</h2>
 <p>Desarrollar un sistema inteligente integrado basado en aprendizaje profundo que permita predecir la demanda de transporte, clasificar comportamientos distractores en conductores a partir de imágenes y generar recomendaciones personalizadas de destinos de viaje, con el fin de optimizar la eficiencia operativa, mejorar la seguridad vial y elevar la experiencia del usuario en una empresa de transporte.</p>
@@ -257,6 +304,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="desarrollo-del-proyecto" class="level1">
 <h1>Desarrollo del proyecto</h1>
+<hr>
 <section id="punto-1-análisis-y-predicción-de-demanda-turística" class="level2">
 <h2 class="anchored" data-anchor-id="punto-1-análisis-y-predicción-de-demanda-turística">Punto 1: Análisis y Predicción de Demanda Turística</h2>
 <section id="revisión-y-tratamiento-del-dataset" class="level3">
@@ -384,6 +432,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="conclusiones">Conclusiones</h3>
 <p>A pesar de las limitaciones del dataset (únicamente 3 fechas distintas), se observan indicios de variaciones diarias que podrían interpretarse como patrones estacionales con mayor disponibilidad de datos. El modelo Prophet está correctamente estructurado para capturar componentes de tendencia, estacionalidad y efectos temporales cuando se disponga de una serie temporal más extensa.</p>
 <p>La arquitectura del modelo proporciona una base sólida para futuras expansiones del análisis con datasets más completos y períodos temporales más amplios.</p>
+<hr>
 </section>
 </section>
 <section id="punto-2-clasificación-de-comportamientos-del-conductor" class="level2">
@@ -516,6 +565,7 @@ ul.task-list li input[type="checkbox"] {
 <p>A pesar del buen desempeño del modelo en términos de métricas como precisión, recall y F1-score, es importante tener en cuenta algunas limitaciones inherentes al conjunto de datos utilizado. Aunque el dataset es amplio y de buena calidad, todas las imágenes fueron capturadas desde una única perspectiva: una vista lateral y elevada que permite observar al conductor desde la cintura hacia arriba. Esta posición no representa el ángulo habitual desde el que se toman imágenes en contextos reales. Una búsqueda rápida en internet evidencia que esta perspectiva estandarizada no es la más común en escenarios de conducción reales, lo que puede limitar la capacidad de generalización del modelo ante imágenes tomadas desde otros ángulos.</p>
 <p>Para mitigar esta limitación, una posible solución sería que la empresa de transporte indique explícitamente la ubicación en la que deben instalarse las cámaras en los vehículos, de modo que coincida con la perspectiva del dataset y se mantenga la efectividad del modelo en producción.</p>
 <p>Adicionalmente, la clase “other_activities” presenta ambigüedades importantes. Su definición es demasiado general y, en la práctica, resulta difícil interpretar qué actividad realiza exactamente el conductor en muchas de las imágenes etiquetadas con esta clase. Esta falta de claridad no solo podría haber contribuido a un desempeño relativamente inferior del modelo en dicha categoría, sino que también explica por qué el modelo tiende a clasificar imágenes externas al conjunto de entrenamiento como “other_activities” con mayor frecuencia.</p>
+<hr>
 </section>
 </section>
 <section id="tipos-de-distracción-del-conductor-análisis-y-prevención" class="level3">
@@ -662,6 +712,82 @@ ul.task-list li input[type="checkbox"] {
 <section id="conclusiones-1" class="level3">
 <h3 class="anchored" data-anchor-id="conclusiones-1">Conclusiones</h3>
 <p>El sistema de recomendación híbrido implementado representa un enfoque técnicamente sólido para la personalización de sugerencias turísticas. Los resultados iniciales demuestran capacidad operativa con oportunidades claras de optimización. La arquitectura modular facilita futuras iteraciones y mejoras incrementales, posicionando el sistema como una base escalable para aplicaciones turísticas personalizadas.</p>
+</section>
+</section>
+</section>
+<section id="herramienta-web" class="level1">
+<h1>Herramienta web</h1>
+<p>La página web creada con la librería <code>Streamlit</code> y desplegada en su plataforma <code>Streamlit Community Cloud</code> consiste de 5 paginas:</p>
+<section id="página-principal-home" class="level3">
+<h3 class="anchored" data-anchor-id="página-principal-home">1. Página Principal (Home)</h3>
+<p>Punto de entrada al sistema inteligente. En el centro de la interfaz se muestran accesos directos a cada uno de los tres modulos principales del sistema.</p>
+ <img src="imagenes/Pagina_principal_wp.png" alt="Home">
+<p>Sobre el lado izquierdo de la interfaz se encuentra la barra de navegación que permite al usuario navegar por la aplicación.</p>
+</section>
+<section id="predicción-de-demanda-turistica" class="level3">
+<h3 class="anchored" data-anchor-id="predicción-de-demanda-turistica">2. Predicción de demanda turistica</h3>
+<p>Este módulo permite seleccionar una ciudad y visualizar:</p>
+<ul>
+<li><p><strong>Predicción de demanda para los próximos 30 días</strong>, con bandas de incertidumbre y tendencias proyectadas.</p></li>
+<li><p><strong>Demanda histórica reciente</strong>, para comparar patrones pasados con la predicción actual.</p></li>
+</ul>
+<p>La visualización es interactiva y está optimizada para facilitar la interpretación rápida de tendencias en destinos turísticos clave.</p>
+ <img src="imagenes/demanda.png" alt="Home">
+</section>
+<section id="identificación-de-comportamientos-peligrosos-al-conducir" class="level3">
+<h3 class="anchored" data-anchor-id="identificación-de-comportamientos-peligrosos-al-conducir">3. Identificación de comportamientos peligrosos al conducir</h3>
+<p>Permite seleccionar una imagen del sistema del usuario ya sea haciendo uso del botón <em>Browse files</em> o arrastrando y soltando la imagen sobre la interfaz.</p>
+ <img src="imagenes/comp_arriba.png" alt="Home">
+<p>Una vez cargada la imágen el usuario puede pedir una predicción sobre el archivo proporcionado.</p>
+ <img src="imagenes/comp_abajo.png" alt="Home">
+<p>El sistema indica las tres mejores predicciones del modelo y el tipo de comportamiento en el que está incurriendo el usuario.</p>
+</section>
+<section id="recomendador-de-destinos-turísticos" class="level3">
+<h3 class="anchored" data-anchor-id="recomendador-de-destinos-turísticos">4. Recomendador de destinos turísticos</h3>
+<p>Recomendador hibrido de destino turísticos. Por defecto genera recomendaciones para usuarios nuevos, los cuales deben indicar sus preferencias de viaje en un formulario.</p>
+ <img src="imagenes/recom_1.png" alt="Home">
+<p>Si en el campo <em>ID de usuario</em> se indica un código que ya estaba registrado en el sistema el sistema realiza una recomendación basada en el historial de viajes del usuario.</p>
+ <img src="imagenes/recom_2.png" alt="Home">
+<p>El sistema puede que recomiende un número de destinos menores al solicitado por el usuario en el formulario.</p>
+</section>
+<section id="sobre-nosotros" class="level3">
+<h3 class="anchored" data-anchor-id="sobre-nosotros">5. Sobre Nosotros</h3>
+<p>Página con información sobre el proyecto y sus desarrolladores.</p>
+ <img src="imagenes/us.png" alt="Home">
+</section>
+</section>
+<section id="conclusiones-2" class="level1">
+<h1>Conclusiones</h1>
+<p>Los resultados obtenidos en este trabajo evidencian el valor estratégico de integrar inteligencia artificial en el análisis del transporte turístico. Desde una perspectiva comercial, los modelos desarrollados permiten personalizar servicios, identificar nuevos nichos de mercado y diseñar campañas más efectivas en función de los hábitos y preferencias de los usuarios. La predicción de demanda facilita una mejor planificación operativa, mientras que la identificación de conductas distractoras mediante imágenes ofrece insumos clave para mejorar la seguridad vial.</p>
+<p>Además, se destaca la posibilidad de cruzar datos operativos y visuales para comprender cómo factores como la carga laboral, el entorno físico y las expectativas del cliente afectan el nivel de atención de los conductores. Esto permite diseñar estrategias de prevención, como ajustes en turnos, capacitación en gestión del estrés, o implementación de sistemas de monitoreo con alertas en tiempo real.</p>
+<p>Finalmente, el enfoque propuesto no solo fortalece la toma de decisiones empresariales, sino que abre la puerta a políticas públicas orientadas a mejorar la experiencia del viajero y la seguridad en la prestación del servicio, consolidando una visión más integral, eficiente y humana del transporte turístico.</p>
+<section id="recomendaciones-y-propuestas-futuras" class="level2">
+<h2 class="anchored" data-anchor-id="recomendaciones-y-propuestas-futuras">Recomendaciones y Propuestas Futuras</h2>
+<section id="mejora-del-modelo-predictivo" class="level3">
+<h3 class="anchored" data-anchor-id="mejora-del-modelo-predictivo">1. Mejora del modelo predictivo</h3>
+<ul>
+<li>Incorporar variables externas como clima, festividades o eventos locales.</li>
+<li>Explorar modelos más avanzados como Prophet, LSTM o modelos híbridos con aprendizaje profundo.</li>
+</ul>
+</section>
+<section id="mayor-cobertura-geográfica" class="level3">
+<h3 class="anchored" data-anchor-id="mayor-cobertura-geográfica">2. Mayor cobertura geográfica</h3>
+<ul>
+<li>Ampliar el sistema para incluir más ciudades o destinos turísticos nacionales e internacionales.</li>
+<li>Incluir agrupación por regiones para análisis comparativos.</li>
+</ul>
+</section>
+<section id="predicciones-de-largo-plazo" class="level3">
+<h3 class="anchored" data-anchor-id="predicciones-de-largo-plazo">3. Predicciones de largo plazo</h3>
+<ul>
+<li>Permitir al usuario seleccionar horizontes de predicción más amplios (3, 6 o 12 meses).</li>
+</ul>
+</section>
+<section id="integración-de-componentes" class="level3">
+<h3 class="anchored" data-anchor-id="integración-de-componentes">4. Integración de componentes</h3>
+<ul>
+<li>Usar la demanda proyectada como insumo para recomendar destinos alternativos menos saturados.</li>
+</ul>
 <hr>
 </section>
 </section>
@@ -754,7 +880,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/jochoara\.quarto\.pub\/trabajo-3");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

@@ -35,7 +35,7 @@ execute:
     font-family: Arial, sans-serif;
     color: #333;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);">
-    <h1 style="color:rgb(26, 54, 97); font-size: 50px;">Trabajo 3: aplicaciones en sistemas de recomendación e imágenes</h1>
+    <h1 style="text-align:center ;color:rgb(26, 54, 97); font-size: 50px;">Trabajo 3: aplicaciones en sistemas de recomendación e imágenes</h1>
     <h2 style="color: #555;">Redes Neuronales y Algoritmos Bioinspirados</h2>
 
     <h3 style="color: #222; margin: 10px 0;">Equipo:</h3>
@@ -52,6 +52,47 @@ execute:
 </div>
 
 ```
+
+---
+
+## Resumen ejecutivo
+
+En el contexto actual, las empresas de transporte enfrentan desafíos crecientes relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. Factores como la variabilidad en la demanda, los riesgos asociados a la conducción distraída y la necesidad de ofrecer experiencias personalizadas exigen soluciones tecnológicas avanzadas. Este proyecto propone el desarrollo de un sistema inteligente integrado basado en técnicas de aprendizaje profundo, con el objetivo de abordar tres problemáticas clave: la predicción de la demanda de transporte mediante series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos de viaje para los usuarios. 
+
+La solución desarrollada es una aplicación web interactiva que integra tres módulos basados en modelos de aprendizaje profundo. Cada módulo responde directamente a una necesidad operativa de la empresa:
+
+- **Predicción de demanda**: utiliza un modelo de series de tiempo para anticipar la afluencia turística en distintos destinos, facilitando la planificación de recursos logísticos y humanos.
+
+- **Clasificación de conducción distractiva**: emplea modelos de visión por computadora para detectar automáticamente comportamientos riesgosos al volante a partir de imágenes, mejorando la seguridad operativa.
+
+- **Recomendación personalizada de destinos**: mediante sistemas híbridos de recomendación, sugiere destinos turísticos a los usuarios según su historial y preferencias, mejorando la experiencia del cliente.
+
+
+*Tecnologías utilizadas*: 
+
+- Construcción de pagina web: `Streamlit`
+- Modelo de series de tiempo: `Prophet`
+- Clasificador de comportamientos peligrosos: Modelo de `Torch` basado en arquitectura vgg19
+- Sistema recomendador: `Sklearn`
+
+*Resultados*:
+
+- Modelo de series de tiempo: 
+  - Leh Ladakh y Jaipur City  : **Excelente ajuste**
+  - Taj Mahal y Goa Beaches   : **Ajuste moderado**
+  - Kerala Backwaters         : **Ajuste deficiente**
+  
+- Clasificador de comportamientos peligrosos: 
+  - Exactitud promedio        : **95%**
+  
+- Sistema recomendador:
+  - Precisión promedio        : **27.9%**
+  - Recall promedio           : **65.5%** 
+
+Este estudio demuestra cómo la integración de modelos inteligentes permite tomar decisiones estratégicas basadas en datos reales, optimizando la operación, seguridad y experiencia del usuario en el sector transporte. La información obtenida puede aprovecharse comercialmente para personalizar servicios, detectar riesgos en la conducción, identificar oportunidades de mercado y diseñar campañas más efectivas, posicionando a las empresas con una ventaja competitiva clara.
+
+---
+
 # Índices
 
 ### Contenidos
@@ -91,9 +132,16 @@ execute:
 
 # Introducción
 
-En el contexto actual, las empresas de transporte enfrentan desafíos crecientes relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. Factores como la variabilidad en la demanda, los riesgos asociados a la conducción distraída y la necesidad de ofrecer experiencias personalizadas exigen soluciones tecnológicas avanzadas. Este proyecto propone el desarrollo de un sistema inteligente integrado basado en técnicas de aprendizaje profundo, con el objetivo de abordar tres problemáticas clave: la predicción de la demanda de transporte mediante series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos de viaje para los usuarios. 
+En el panorama actual, las empresas de transporte enfrentan desafíos cada vez más complejos relacionados con la eficiencia operativa, la seguridad vial y la satisfacción del usuario. La creciente variabilidad en la demanda de servicios, los riesgos asociados a la conducción distraída y la necesidad de ofrecer experiencias más personalizadas exigen soluciones tecnológicas avanzadas que permitan responder de forma ágil y efectiva a estas necesidades.
 
-# Objetivos
+Este trabajo propone el desarrollo de un sistema inteligente integrado, basado en técnicas de aprendizaje profundo, que aborda de manera simultánea tres problemáticas clave: la predicción de la demanda de transporte mediante modelos de series de tiempo, la clasificación automática de comportamientos distractores en conductores a partir de imágenes, y la recomendación personalizada de destinos turísticos según las preferencias del usuario.
+
+Durante el desarrollo del proyecto se logró articular y contextualizar estos tres ejes temáticos, inicialmente disímiles, de forma complementaria. El análisis conjunto de los datos permite generar información estratégica de alto valor tanto para empresas como para conductores. Disponer de un conocimiento detallado sobre las preferencias de viaje, destinos más frecuentados y su evolución a lo largo del tiempo, brinda herramientas clave para el diseño de rutas, la optimización de horarios y la planificación operativa.
+
+Asimismo, el sistema facilita identificar patrones de comportamiento, tendencias emergentes o en decadencia, y conductas de riesgo en la conducción, elementos que pueden aprovecharse no solo para mejorar la oferta de servicios y la experiencia del usuario, sino también para implementar estrategias comerciales más efectivas y programas de capacitación para conductores enfocados en la seguridad y el valor cultural o histórico de los destinos.
+
+
+## Objetivos
 
 ## Objetivo General
 
@@ -109,7 +157,11 @@ Desarrollar un sistema inteligente integrado basado en aprendizaje profundo que 
 
 # Desarrollo del proyecto
 
+
+***
+
 ## Punto 1: Análisis y Predicción de Demanda Turística
+
 
 ### Revisión y Tratamiento del Dataset
 
@@ -228,6 +280,8 @@ A pesar de las limitaciones del dataset (únicamente 3 fechas distintas), se obs
 
 La arquitectura del modelo proporciona una base sólida para futuras expansiones del análisis con datasets más completos y períodos temporales más amplios.
 
+***
+
 ## Punto 2: Clasificación de Comportamientos del Conductor
 
 ### Descripción del problema
@@ -315,6 +369,7 @@ Para mitigar esta limitación, una posible solución sería que la empresa de tr
 
 Adicionalmente, la clase "other_activities" presenta ambigüedades importantes. Su definición es demasiado general y, en la práctica, resulta difícil interpretar qué actividad realiza exactamente el conductor en muchas de las imágenes etiquetadas con esta clase. Esta falta de claridad no solo podría haber contribuido a un desempeño relativamente inferior del modelo en dicha categoría, sino que también explica por qué el modelo tiende a clasificar imágenes externas al conjunto de entrenamiento como "other_activities" con mayor frecuencia.
 
+***
 
 ### Tipos de Distracción del Conductor: Análisis y Prevención
 
@@ -376,7 +431,8 @@ Según estudios de NHTSA y VTTI, la distracción ocurrió dentro de los 3 segund
 
 El sistema implementado permite la identificación automatizada de comportamientos de riesgo, proporcionando una base tecnológica para la implementación de medidas preventivas en tiempo real. La combinación de técnicas de visión por computadora con marcos regulatorios y educativos representa un enfoque integral para la reducción de accidentes relacionados con la distracción del conductor.
 
----
+
+***
 
 ## Punto 3: Sistema de Recomendación Híbrido para Destinos Turísticos
 
@@ -440,6 +496,101 @@ La implementación de técnicas de validación cruzada más robustas y el uso de
 ### Conclusiones
 
 El sistema de recomendación híbrido implementado representa un enfoque técnicamente sólido para la personalización de sugerencias turísticas. Los resultados iniciales demuestran capacidad operativa con oportunidades claras de optimización. La arquitectura modular facilita futuras iteraciones y mejoras incrementales, posicionando el sistema como una base escalable para aplicaciones turísticas personalizadas.
+
+# Herramienta web
+
+La página web creada con la librería `Streamlit`  y desplegada en su plataforma `Streamlit Community Cloud` consiste de 5 paginas:
+
+### 1. Página Principal (Home)
+
+Punto de entrada al sistema inteligente. En el centro de la interfaz se muestran accesos directos a cada uno de los tres modulos principales del sistema.
+
+```{=html}
+ <img src="imagenes/Pagina_principal_wp.png" alt="Home" />
+```
+
+Sobre el lado izquierdo de la interfaz se encuentra la barra de navegación que permite al usuario navegar por la aplicación.
+
+### 2. Predicción de demanda turistica
+   
+Este módulo permite seleccionar una ciudad y visualizar:
+
+- **Predicción de demanda para los próximos 30 días**, con bandas de incertidumbre y tendencias proyectadas.
+
+- **Demanda histórica reciente**, para comparar patrones pasados con la predicción actual.
+
+La visualización es interactiva y está optimizada para facilitar la interpretación rápida de tendencias en destinos turísticos clave.
+
+```{=html}
+ <img src="imagenes/demanda.png" alt="Home" />
+```
+
+### 3. Identificación de comportamientos peligrosos al conducir
+
+Permite seleccionar una imagen del sistema del usuario ya sea haciendo uso del botón *Browse files* o arrastrando y soltando la imagen sobre la interfaz.
+
+```{=html}
+ <img src="imagenes/comp_arriba.png" alt="Home" />
+```
+
+
+Una vez cargada la imágen el usuario puede pedir una predicción sobre el archivo proporcionado.
+
+
+```{=html}
+ <img src="imagenes/comp_abajo.png" alt="Home" />
+```
+
+El sistema indica las tres mejores predicciones del modelo y el tipo de comportamiento en el que está incurriendo el usuario.
+
+### 4. Recomendador de destinos turísticos
+
+Recomendador hibrido de destino turísticos. Por defecto genera recomendaciones para usuarios nuevos, los cuales deben indicar sus preferencias de viaje en un formulario. 
+
+```{=html}
+ <img src="imagenes/recom_1.png" alt="Home" />
+```
+
+Si en el campo *ID de usuario* se indica un código que ya estaba registrado en el sistema el sistema realiza una recomendación basada en el historial de viajes del usuario.
+
+```{=html}
+ <img src="imagenes/recom_2.png" alt="Home" />
+```
+
+El sistema puede que recomiende un número de destinos menores al solicitado por el usuario en el formulario.
+
+### 5. Sobre Nosotros
+
+Página con información sobre el proyecto y sus desarrolladores.
+
+```{=html}
+ <img src="imagenes/us.png" alt="Home" />
+```
+
+# Conclusiones
+
+Los resultados obtenidos en este trabajo evidencian el valor estratégico de integrar inteligencia artificial en el análisis del transporte turístico. Desde una perspectiva comercial, los modelos desarrollados permiten personalizar servicios, identificar nuevos nichos de mercado y diseñar campañas más efectivas en función de los hábitos y preferencias de los usuarios. La predicción de demanda facilita una mejor planificación operativa, mientras que la identificación de conductas distractoras mediante imágenes ofrece insumos clave para mejorar la seguridad vial.
+
+Además, se destaca la posibilidad de cruzar datos operativos y visuales para comprender cómo factores como la carga laboral, el entorno físico y las expectativas del cliente afectan el nivel de atención de los conductores. Esto permite diseñar estrategias de prevención, como ajustes en turnos, capacitación en gestión del estrés, o implementación de sistemas de monitoreo con alertas en tiempo real.
+
+Finalmente, el enfoque propuesto no solo fortalece la toma de decisiones empresariales, sino que abre la puerta a políticas públicas orientadas a mejorar la experiencia del viajero y la seguridad en la prestación del servicio, consolidando una visión más integral, eficiente y humana del transporte turístico.
+
+
+## Recomendaciones y Propuestas Futuras
+
+### 1. Mejora del modelo predictivo
+- Incorporar variables externas como clima, festividades o eventos locales.
+- Explorar modelos más avanzados como Prophet, LSTM o modelos híbridos con aprendizaje profundo.
+
+### 2. Mayor cobertura geográfica
+- Ampliar el sistema para incluir más ciudades o destinos turísticos nacionales e internacionales.
+- Incluir agrupación por regiones para análisis comparativos.
+
+### 3. Predicciones de largo plazo
+- Permitir al usuario seleccionar horizontes de predicción más amplios (3, 6 o 12 meses).
+
+### 4. Integración de componentes
+- Usar la demanda proyectada como insumo para recomendar destinos alternativos menos saturados.
 
 ---
 
